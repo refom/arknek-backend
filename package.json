@@ -1,0 +1,19 @@
+{
+  "name": "ark-db",
+  "version": "1.0.0",
+  "description": "Backend Catalog Arknights",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "prod": "node index.js"
+  },
+  "author": "Reforms",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
