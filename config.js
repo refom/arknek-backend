@@ -4,8 +4,12 @@ const CONFIG = {
 	PORT: 3000,
 	ROOT_PATH: __dirname,
 	PUBLIC_DB: "db",
+	LOCAL_DB: "local",
 	OPERATORS_DB: "operators.json",
-	PRIVATE_DB: "local",
+	ACC_DB: "acc.json",
+	LOCATIONS_DB: "locations.json",
+	COUNTER_DB: "counter.json",
+	PARTS_DB: "part.json",
 }
 
 
