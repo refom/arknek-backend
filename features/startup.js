@@ -7,7 +7,7 @@ const PARTS_DB = require("./part-db");
 const Startup = () => {
 	console.log("Startup Fetch");
 	console.log("- Operators");
-	OPERATOR_DB.FetchOperators();
+	OPERATOR_DB.Fetch();
 
 	console.log("- Acc");
 	ACC_DB.Fetch();
