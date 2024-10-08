@@ -36,7 +36,7 @@ const GetById = (id) => PARTS.find((part) => part.id === id);
  * @returns {string} - part id
  */
 const CreateId = ({ name, prefix }) =>
-	`${prefix.substring(0, 3).toLowerCase()}${name
+	`${prefix ? prefix.substring(0, 3).toLowerCase() : ""}${name
 		.substring(0, 3)
 		.toLowerCase()}`;
 
