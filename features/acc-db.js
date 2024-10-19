@@ -1,9 +1,11 @@
-const DB = require("./db-utils");
+const DB = require("./helper/db-utils");
 const CONFIG = require("../config");
 const path = require("path");
 
 let ACCS = []
 const ACC_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.PUBLIC_DB, CONFIG.ACC_DB)
+
+const GetById = (id) => ACCS.find((acc) => acc.id === id)
 
 /**
  * Check if the acc data is valid
@@ -17,7 +19,8 @@ const IsAccValid = ({ operator, part_id, counter, story }) => Boolean(operator &
  * @param {string} id - acc id to be checked
  * @returns {Boolean} - true if exists, false if not exist
  */
-const IsAccExist = (id) => Boolean(ACCS.find((acc) => acc.id === id));
+const IsAccExist = (id) => Boolean(GetById(id));
+
 
 /**
  * Fetch all accs from database
@@ -57,7 +60,7 @@ const Delete = (id) => {
  * @returns {Boolean} - true if success, false if failed
  */
 const Edit = ({ id, operator, tag, story }) => {
-	const acc = ACCS.find((acc) => acc.id === id)
+	const acc = GetById(id)
 	if (!acc) return false
 
 	acc.operator = operator
@@ -66,7 +69,9 @@ const Edit = ({ id, operator, tag, story }) => {
 	return DB.Create(ACC_PATH, ACCS)
 };
 
+
 module.exports = {
+	GetById,
 	IsAccValid,
 	IsAccExist,
 	Fetch,

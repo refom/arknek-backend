@@ -11,6 +11,7 @@ const CONFIG = {
 	COUNTER_DB: "counter.json",
 	PARTS_DB: "part.json",
 	TAG_DB: "tag.json",
+	SOLD_DB: "sold.json",
 }
 
 

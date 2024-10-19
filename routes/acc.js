@@ -5,18 +5,20 @@ const STATUS = require("./status");
 const ACC_DB = require("../features/acc-db");
 const LOCATION_DB = require("../features/location-db");
 const PARTS_DB = require("../features/part-db");
+const SOLD_DB = require("../features/sold-db");
 
 // Get all accs
 router.get("/", (req, res) => {
 	res.send(STATUS.Ok(ACC_DB.Fetch(), "Found Accs"));
 });
 
+// Get all locations
 router.get("/location", (req, res) => {
 	res.send(STATUS.Ok(LOCATION_DB.Fetch(), "Found Locations"));
 })
 
 // Add new acc
-// acc: { operator, part_id, counter, story }
+// acc: { operator, part_id, counter, story, tag }
 router.post("/", (req, res) => {
 	const acc = req.body;
 
@@ -76,5 +78,24 @@ router.put("/", (req, res) => {
 
 	res.send(STATUS.Ok(ACC_DB.Fetch(), "Edited Acc"));
 });
+
+// Sold acc
+router.post("/sold/", (req, res) => {
+	const acc = req.body;
+
+	if (!ACC_DB.IsAccExist(acc.id)) return res.send(STATUS.Bad("Acc not exist"));
+
+	if (!SOLD_DB.Add(acc)) return res.send(STATUS.Bad("Failed to sold acc"));
+
+	res.send(STATUS.Ok(ACC_DB.Fetch(), "Sold Acc"));
+})
+
+// Backup acc
+router.get("/backup", (req, res) => {
+	if (!ACC_DB.Backup())
+		return res.send(STATUS.Bad("Failed to backup acc"));
+	res.send(STATUS.Ok(ACC_DB.Fetch(), "Backup acc"));
+});
+
 
 module.exports = router;

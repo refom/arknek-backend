@@ -3,7 +3,7 @@ const router = express.Router();
 
 const STATUS = require("./status");
 const TAG_DB = require("../features/tag-db");
-const { CreateGUID } = require("../features/utils");
+const { CreateGUID } = require("../features/helper/utils");
 
 // Get all tags
 router.get("/", (req, res) => {

@@ -1,4 +1,4 @@
-const DB = require("./db-utils");
+const DB = require("./helper/db-utils");
 const CONFIG = require("../config");
 const path = require("path");
 
@@ -11,9 +11,11 @@ let LOCATIONS = []
 
 /**
  * Fetch all locations from the database
- * @returns {Array<{ id: string, part_id: string, part_name: string, counter: number }>} - all locations
+ * @returns {Array<{ id: string, part_id: string, counter: number }>} - all locations
  */
 const Fetch = () => LOCATIONS = DB.Read(LOCATIONS_PATH) || [];
+
+const GetById = (id) => LOCATIONS.find((loc) => loc.id === id)
 
 const IsCounterExist = (part_id, counter) => {
 	const all_location = GetLocationPartId(part_id)
@@ -79,6 +81,7 @@ const Edit = ({ id, part_id, counter }) => {
 }
 
 module.exports = {
+	GetById,
 	IsCounterExist,
 	GetLocationPartId,
 	GetNextAccId,

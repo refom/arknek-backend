@@ -50,7 +50,7 @@ router.put("/", (req, res) => {
 });
 
 // Backup
-router.post("/backup", (req, res) => {
+router.get("/backup", (req, res) => {
 	if (!OPERATOR_DB.Backup())
 		return res.send(STATUS.Bad("Failed to backup operators"));
 	res.send(STATUS.Ok(OPERATOR_DB.Fetch(), "Backup operators"));

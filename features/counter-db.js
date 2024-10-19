@@ -1,4 +1,4 @@
-const DB = require("./db-utils");
+const DB = require("./helper/db-utils");
 const CONFIG = require("../config");
 const path = require("path");
 
