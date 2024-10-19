@@ -75,7 +75,6 @@ const Edit = ({ id, name, prefix }) => {
 	const part = PARTS.find((part) => part.id === id);
 	if (!part) return false;
 
-	part.id = CreateId({ name, prefix });
 	part.name = name;
 	part.prefix = prefix;
 	return DB.Create(PARTS_PATH, PARTS);

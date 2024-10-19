@@ -29,6 +29,9 @@ app.use("/acc", acc);
 const part = require("./routes/part");
 app.use("/part", part);
 
+const tag = require("./routes/tag");
+app.use("/tag", tag);
+
 // not found
 app.get("*", (req, res) => {
 	res.send(STATUS.Bad("Page not found"));

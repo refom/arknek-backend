@@ -3,11 +3,22 @@ const router = express.Router();
 
 const STATUS = require("./status");
 const PARTS_DB = require("../features/part-db");
+const LOCATION_DB = require("../features/location-db");
 
 // Get all parts
 router.get("/", (req, res) => {
 	res.send(STATUS.Ok(PARTS_DB.Fetch(), "Found Parts"));
 });
+
+// Get all part counter
+router.get("/counter/:id", (req, res) => {
+	const id = req.params.id;
+
+	if (!PARTS_DB.IsPartExist(id))
+		return res.send(STATUS.Bad("Part not exist"));
+
+	res.send(STATUS.Ok(LOCATION_DB.GetLocationPartId(id), "Found Parts Counter"));
+})
 
 // Add new part
 // part: { name, prefix }

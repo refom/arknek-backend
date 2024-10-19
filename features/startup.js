@@ -3,6 +3,7 @@ const ACC_DB = require("./acc-db");
 const LOCATION_DB = require("./location-db");
 const COUNTER_DB = require("./counter-db");
 const PARTS_DB = require("./part-db");
+const TAG_DB = require("./tag-db");
 
 const Startup = () => {
 	console.log("Startup Fetch");
@@ -20,6 +21,9 @@ const Startup = () => {
 
 	console.log("- Counter");
 	COUNTER_DB.Fetch();
+
+	console.log("- Tag");
+	TAG_DB.Fetch();
 };
 
 module.exports = Startup;

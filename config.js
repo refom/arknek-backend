@@ -10,6 +10,7 @@ const CONFIG = {
 	LOCATIONS_DB: "locations.json",
 	COUNTER_DB: "counter.json",
 	PARTS_DB: "part.json",
+	TAG_DB: "tag.json",
 }
 
 

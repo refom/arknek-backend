@@ -4,11 +4,16 @@ const router = express.Router();
 const STATUS = require("./status");
 const ACC_DB = require("../features/acc-db");
 const LOCATION_DB = require("../features/location-db");
+const PARTS_DB = require("../features/part-db");
 
 // Get all accs
 router.get("/", (req, res) => {
 	res.send(STATUS.Ok(ACC_DB.Fetch(), "Found Accs"));
 });
+
+router.get("/location", (req, res) => {
+	res.send(STATUS.Ok(LOCATION_DB.Fetch(), "Found Locations"));
+})
 
 // Add new acc
 // acc: { operator, part_id, counter, story }
@@ -17,17 +22,19 @@ router.post("/", (req, res) => {
 
 	if (!ACC_DB.IsAccValid(acc)) return res.send(STATUS.Bad("Data invalid"));
 
-	// Create ID
-	if (!LOCATION_DB.IsPartExist(acc.part_id))
+	// Check if already Exist
+	if (!PARTS_DB.IsPartExist(acc.part_id))
 		return res.send(STATUS.Bad("Part not exist"));
+	if (LOCATION_DB.IsCounterExist(acc.part_id, acc.counter))
+		return res.send(STATUS.Bad("Counter already exist"));
+
+	// Create ID
 	acc.id = LOCATION_DB.GetNextAccId(acc.part_id);
-	if (ACC_DB.IsAccExist(acc.id))
-		return res.send(STATUS.Bad("Acc already exist"));
 
 	// Save part_id and counter to local DB
-	if (!LOCATION_DB.Save(acc.id, acc.part_id, acc.counter))
+	if (!LOCATION_DB.Add(acc.id, acc.part_id, acc.counter))
 		return res.send(STATUS.Bad("Failed to save location and counter"));
-
+	
 	// Save acc to public DB
 	if (!ACC_DB.Add(acc)) return res.send(STATUS.Bad("Failed to add acc"));
 	res.send(STATUS.Ok(ACC_DB.Fetch(), "Added Acc"));
@@ -55,7 +62,7 @@ router.put("/", (req, res) => {
 
 	if (!(ACC_DB.IsAccValid(acc) && Boolean(acc.id)))
 		return res.send(STATUS.Bad("Data invalid"));
-	if (!LOCATION_DB.IsPartExist(acc.part_id))
+	if (!PARTS_DB.IsPartExist(acc.part_id))
 		return res.send(STATUS.Bad("Part not exist"));
 	if (!ACC_DB.IsAccExist(acc.id))
 		return res.send(STATUS.Bad("Acc not exist"));

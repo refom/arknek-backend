@@ -8,18 +8,28 @@ const PARTS_DB = require("./part-db");
 const LOCATIONS_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.LOCAL_DB, CONFIG.LOCATIONS_DB)
 let LOCATIONS = []
 
-/**
- * Check if a part exists in the database
- * @param {string} id - part id to be checked
- * @returns {Boolean} - true if part exists, false if not
- */
-const IsPartExist = (id) => Boolean(PARTS_DB.GetById(id))
 
 /**
  * Fetch all locations from the database
  * @returns {Array<{ id: string, part_id: string, part_name: string, counter: number }>} - all locations
  */
 const Fetch = () => LOCATIONS = DB.Read(LOCATIONS_PATH) || [];
+
+const IsCounterExist = (part_id, counter) => {
+	const all_location = GetLocationPartId(part_id)
+	return Boolean(all_location.find((loc) => loc.counter === counter))
+}
+
+/**
+ * Get all locations with the given part id sorted by counter
+ * @param {string} part_id - part id
+ * @returns {Array<{ id: string, part_id: string, part_name: string, counter: number }>} - all locations with the given part id
+ */
+const GetLocationPartId = (part_id) => {
+	const all_location = LOCATIONS.filter((loc) => loc.part_id === part_id)
+	return all_location.sort((a, b) => a.counter - b.counter)
+}
+
 
 /**
  * Generate the next acc id based on the part name and counter
@@ -39,9 +49,8 @@ const GetNextAccId = (part_id) => {
  * @param {number} counter - counter value
  * @returns {Boolean} - true if success, false if failed
  */
-const Save = (id, part_id, counter) => {
-	const part_name = PARTS_DB.GetById(part_id).name
-	LOCATIONS.push({ id, part_id, part_name, counter })
+const Add = (id, part_id, counter) => {
+	LOCATIONS.push({ id, part_id, counter })
 	return DB.Create(LOCATIONS_PATH, LOCATIONS)
 }
 
@@ -64,18 +73,17 @@ const Edit = ({ id, part_id, counter }) => {
 	const loc = LOCATIONS.find((loc) => loc.id === id)
 	if (!loc) return false
 
-	const part_name = PARTS_DB.GetById(part_id).name
 	loc.part_id = part_id
-	loc.part_name = part_name
 	loc.counter = counter
 	return DB.Create(LOCATIONS_PATH, LOCATIONS)
 }
 
 module.exports = {
-	IsPartExist,
+	IsCounterExist,
+	GetLocationPartId,
 	GetNextAccId,
 	Fetch,
-	Save,
+	Add,
 	Delete,
 	Edit,
 }
