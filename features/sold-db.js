@@ -26,8 +26,9 @@ const Add = ({ id, sold }) => {
 		story: acc.story,
 		part_id: loc.part_id,
 		counter: loc.counter,
-		sold_date: new Date().toLocaleDateString(),
-		edited_date: new Date().toLocaleDateString(),
+		created_at: acc.created_at,
+		sold_at: new Date().toLocaleString(),
+		updated_at: new Date().toLocaleString(),
 		sold: sold
 	})
 
@@ -53,8 +54,9 @@ const Edit = (acc) => {
 	acc_sold.story = acc.story
 	acc_sold.part_id = acc.part_id
 	acc_sold.counter = acc.counter
-	acc_sold.sold_date = acc.sold_date
-	acc_sold.edited_date = new Date().toLocaleDateString()
+	acc_sold.created_at = acc.created_at
+	acc_sold.sold_at = acc.sold_at
+	acc_sold.updated_at = new Date().toLocaleString()
 	acc_sold.sold = acc.sold
 	return DB.Create(SOLD_PATH, SOLDS)
 }

@@ -40,7 +40,14 @@ const Backup = () => DB.Backup(ACC_PATH);
  * @returns {Boolean} - true if success, false if failed
  */
 const Add = ({ id, operator, tag, story }) => {
-	ACCS.push({ id, operator, tag, story })
+	ACCS.push({
+		id,
+		operator,
+		tag,
+		story,
+		created_at: new Date().toLocaleString(),
+		updated_at: new Date().toLocaleString()
+	})
 	return DB.Create(ACC_PATH, ACCS)
 };
 
@@ -66,6 +73,7 @@ const Edit = ({ id, operator, tag, story }) => {
 	acc.operator = operator
 	acc.tag = tag
 	acc.story = story
+	acc.updated_at = new Date().toLocaleString()
 	return DB.Create(ACC_PATH, ACCS)
 };
 

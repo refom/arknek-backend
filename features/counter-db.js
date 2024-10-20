@@ -2,14 +2,14 @@ const DB = require("./helper/db-utils");
 const CONFIG = require("../config");
 const path = require("path");
 
-let COUNTER = 1
+let COUNTER = 0
 const COUNTER_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.LOCAL_DB, CONFIG.COUNTER_DB)
 
 /**
  * Fetch current counter value from database
  * @returns {number} - current counter value
  */
-const Fetch = () => COUNTER = DB.Read(COUNTER_PATH) || 1;
+const Fetch = () => COUNTER = DB.Read(COUNTER_PATH) || 0;
 
 /**
  * Increase counter value by 1 and save it to database

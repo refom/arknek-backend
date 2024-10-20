@@ -1,1 +1,50 @@
-[{"id":"ARKNAI0002","operator":["horn","amiya","myrtle","aosta","greyy_the_lightningbearer","grain_buds","scavenger","meteor","ambriel","jessica","cutter","vermeil","earthspirit","pinecone"],"story":"0-4","tag":["1iai76liu03c7312e09cbd5"]},{"id":"ARKNAI0003","operator":["amiya","scavenger","jessica","mudrock","iana","matterhorn","haze","myrrh","perfumer","deepcolor","shaw","plume","vanilla","popukar","adnachiel","cardigan"],"story":"0-4","tag":["1iai76liu03c7312e09cbd5"]}]
+[
+	{
+		"id": "ARKNAI0001",
+		"operator": [
+			"horn",
+			"amiya",
+			"myrtle",
+			"aosta",
+			"greyy_the_lightningbearer",
+			"grain_buds",
+			"scavenger",
+			"meteor",
+			"ambriel",
+			"jessica",
+			"cutter",
+			"vermeil",
+			"earthspirit",
+			"pinecone"
+		],
+		"tag": ["1iai76liu03c7312e09cbd5"],
+		"story": "0-4",
+		"created_at": "10/20/2024, 6:37:28 PM",
+		"updated_at": "10/20/2024, 6:37:28 PM"
+	},
+	{
+		"id": "ARKNAI0002",
+		"operator": [
+			"amiya",
+			"scavenger",
+			"jessica",
+			"mudrock",
+			"iana",
+			"matterhorn",
+			"haze",
+			"myrrh",
+			"perfumer",
+			"deepcolor",
+			"shaw",
+			"plume",
+			"vanilla",
+			"popukar",
+			"adnachiel",
+			"cardigan"
+		],
+		"tag": ["1iai76liu03c7312e09cbd5"],
+		"story": "0-4",
+		"created_at": "10/20/2024, 6:37:37 PM",
+		"updated_at": "10/20/2024, 6:37:37 PM"
+	}
+]
