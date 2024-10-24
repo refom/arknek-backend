@@ -4,6 +4,8 @@ const LOCATION_DB = require("./location-db");
 const COUNTER_DB = require("./counter-db");
 const PARTS_DB = require("./part-db");
 const TAG_DB = require("./tag-db");
+const SOLD_DB = require("./sold-db");
+const DUMMY_DB = require("./dummy-db");
 
 const Startup = () => {
 	console.log("Startup Fetch");
@@ -24,6 +26,12 @@ const Startup = () => {
 
 	console.log("- Tag");
 	TAG_DB.Fetch();
+
+	console.log("- Sold");
+	SOLD_DB.Fetch();
+
+	console.log("- Dummy");
+	DUMMY_DB.Fetch();
 };
 
 module.exports = Startup;

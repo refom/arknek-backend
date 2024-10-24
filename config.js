@@ -12,6 +12,7 @@ const CONFIG = {
 	PARTS_DB: "part.json",
 	TAG_DB: "tag.json",
 	SOLD_DB: "sold.json",
+	DUMMY_DB: "dummy.json",
 }
 
 

@@ -44,7 +44,7 @@ const CreateId = ({ name, prefix }) =>
  * Fetch all parts from the database
  * @returns {Array<{ id: string, name: string, prefix: string }>} - all parts
  */
-const Fetch = () => (PARTS = DB.Read(PARTS_PATH) || []);
+const Fetch = () => PARTS = DB.Read(PARTS_PATH) || []
 
 /**
  * Add a new part to database

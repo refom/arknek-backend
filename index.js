@@ -11,14 +11,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// logging
-app.use("/", (req, res, next) => {
-	console.log("Request: " + req.method + " " + req.url);
-	console.log("body: ", req.body);
-	console.log("params:", req.params);
-	next();
-});
-
 // routes
 const operator = require("./routes/operator");
 app.use("/operator", operator);
@@ -32,9 +24,20 @@ app.use("/part", part);
 const tag = require("./routes/tag");
 app.use("/tag", tag);
 
+const dummy = require("./routes/dummy");
+app.use("/dummy", dummy);
+
 // not found
 app.get("*", (req, res) => {
 	res.send(STATUS.Bad("Page not found"));
+});
+
+// logging
+app.use("/", (req, res, next) => {
+	console.log("Request: " + req.method + " " + req.url);
+	console.log("body: ", req.body);
+	console.log("params:", req.params);
+	next();
 });
 
 // when server start

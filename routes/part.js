@@ -48,7 +48,7 @@ router.delete("/:id", (req, res) => {
 	res.send(STATUS.Ok(PARTS_DB.Fetch(), "Deleted Part"));
 });
 
-// Edit acc
+// Edit part
 router.put("/", (req, res) => {
 	const part = req.body;
 

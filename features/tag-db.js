@@ -12,7 +12,7 @@ let TAGS = [];
 const GetById = (id) => TAGS.find((tag) => tag.id === id);
 const IsTagValid = ({ name, rarity }) => Boolean(name && rarity);
 const IsTagExist = (id) => Boolean(GetById(id));
-const Fetch = () => (TAGS = DB.Read(TAG_PATH) || []);
+const Fetch = () => TAGS = DB.Read(TAG_PATH) || []
 
 const Add = ({ id, name, rarity }) => {
 	TAGS.push({ id, name, rarity });
