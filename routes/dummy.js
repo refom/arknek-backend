@@ -14,6 +14,7 @@ router.post("/", (req, res) => {
 	const dummy = req.body;
 
 	if (!DUMMY_DB.IsDummyValid(dummy)) return res.send(STATUS.Bad("Data invalid"));
+	if (DUMMY_DB.IsDummyCounterExist(dummy.part_id, dummy.counter)) return res.send(STATUS.Bad("Counter already exist"));
 
 	if (!DUMMY_DB.Add(dummy)) return res.send(STATUS.Bad("Failed to add dummy"));
 	res.send(STATUS.Ok(DUMMY_DB.Fetch(), "Added Dummy"));
