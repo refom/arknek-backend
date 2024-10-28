@@ -39,10 +39,11 @@ const Backup = () => DB.Backup(ACC_PATH);
  * @param {{ id: string, operator: string, tag: string, story: string }} acc - acc data to be added
  * @returns {Boolean} - true if success, false if failed
  */
-const Add = ({ id, operator, tag, story }) => {
+const Add = ({ id, operator, six_op_length, tag, story }) => {
 	ACCS.push({
 		id,
 		operator,
+		six_op_length,
 		tag,
 		story,
 		created_at: new Date().toLocaleString(),
@@ -66,11 +67,12 @@ const Delete = (id) => {
  * @param {{ id: string, operator: string, tag: string, story: string }} acc - acc data to be edited
  * @returns {Boolean} - true if success, false if failed
  */
-const Edit = ({ id, operator, tag, story }) => {
+const Edit = ({ id, operator, six_op_length, tag, story }) => {
 	const acc = GetById(id)
 	if (!acc) return false
 
 	acc.operator = operator
+	acc.six_op_length = six_op_length
 	acc.tag = tag
 	acc.story = story
 	acc.updated_at = new Date().toLocaleString()
