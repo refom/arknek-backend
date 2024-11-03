@@ -17,7 +17,7 @@ const IsDummyValid = ({ part_id, counter }) => Boolean(part_id && counter);
 const IsDummyCounterExist = (id, counter) => {
 	const dumdum = GetByPartId(id);
 	if (!dumdum) return false;
-	return Boolean(dumdum.counter.find((c) => c.value.toString() === counter));
+	return Boolean(dumdum.counter.find((c) => c.value === counter));
 }
 const Fetch = () => {
 	DUMMYS = DB.Read(DUMMY_PATH)
@@ -52,7 +52,7 @@ const Delete = (part_id, counter) => {
 	const dumdum = GetByPartId(part_id);
 	if (!dumdum) return false;
 
-	dumdum.counter = dumdum.counter.filter((c) => c.value.toString() !== counter);
+	dumdum.counter = dumdum.counter.filter((c) => c.value !== counter);
 	return DB.Create(DUMMY_PATH, DUMMYS);
 };
 

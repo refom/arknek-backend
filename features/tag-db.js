@@ -11,7 +11,8 @@ let TAGS = [];
 
 const GetById = (id) => TAGS.find((tag) => tag.id === id);
 const IsTagValid = ({ name, rarity }) => Boolean(name && rarity);
-const IsTagExist = (id) => Boolean(GetById(id));
+const IsTagExist = ({ name, rarity }) => Boolean(TAGS.find((tag) => tag.name === name && tag.rarity === rarity));
+const IsTagIdExist = (id) => Boolean(GetById(id));
 const Fetch = () => TAGS = DB.Read(TAG_PATH) || []
 
 const Add = ({ id, name, rarity }) => {
@@ -33,12 +34,16 @@ const Edit = ({ id, name, rarity }) => {
 	return DB.Create(TAG_PATH, TAGS);
 };
 
+const Backup = () => DB.Backup(TAG_PATH);
+
 module.exports = {
 	IsTagValid,
 	IsTagExist,
+	IsTagIdExist,
 	GetById,
 	Fetch,
 	Add,
 	Delete,
 	Edit,
+	Backup
 }

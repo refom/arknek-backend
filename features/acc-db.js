@@ -2,17 +2,41 @@ const DB = require("./helper/db-utils");
 const CONFIG = require("../config");
 const path = require("path");
 
+const LOCATION_DB = require("./location-db");
+
 let ACCS = []
 const ACC_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.PUBLIC_DB, CONFIG.ACC_DB)
 
 const GetById = (id) => ACCS.find((acc) => acc.id === id)
+
+const GetAllWithLocation = () => {
+	const acc_data = Fetch();
+	const location_data = LOCATION_DB.Fetch();
+	const result = []
+
+	acc_data.forEach(acc => {
+		const loc = location_data.find(loc => loc.id === acc.id)
+		result.push({
+			id: acc.id,
+			part_id: loc.part_id,
+			counter: loc.counter,
+			story: acc.story,
+			tag: acc.tag,
+			six_op_length: acc.six_op_length,
+			operator: acc.operator,
+			created_at: acc.created_at,
+			updated_at: acc.updated_at,
+		});
+	})
+	return result
+}
 
 /**
  * Check if the acc data is valid
  * @param {{ operator: string, part_id: string, counter: number, story: string }} acc - acc data to be checked
  * @returns {Boolean} - true if valid, false if invalid
  */
-const IsAccValid = ({ operator, part_id, counter, story }) => Boolean(operator && part_id && counter && story);
+const IsAccValid = ({ operator, part_id, counter, story, six_op_length }) => Boolean(operator && part_id && counter && story && six_op_length);
 
 /**
  * Check if the acc exists in database
@@ -81,6 +105,7 @@ const Edit = ({ id, operator, six_op_length, tag, story }) => {
 
 
 module.exports = {
+	GetAllWithLocation,
 	GetById,
 	IsAccValid,
 	IsAccExist,

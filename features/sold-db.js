@@ -27,6 +27,7 @@ const Add = ({ id, sold }) => {
 		part_id: loc.part_id,
 		counter: loc.counter,
 		created_at: acc.created_at,
+		six_op_length: acc.six_op_length,
 		sold_at: new Date().toLocaleString(),
 		updated_at: new Date().toLocaleString(),
 		sold: sold
@@ -56,6 +57,7 @@ const Edit = (acc) => {
 	acc_sold.counter = acc.counter
 	acc_sold.created_at = acc.created_at
 	acc_sold.sold_at = acc.sold_at
+	acc_sold.six_op_length = acc.six_op_length
 	acc_sold.updated_at = new Date().toLocaleString()
 	acc_sold.sold = acc.sold
 	return DB.Create(SOLD_PATH, SOLDS)

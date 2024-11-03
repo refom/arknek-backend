@@ -21,7 +21,9 @@ const IsPartValid = (name) => Boolean(name);
  * @param {string} id - part id
  * @returns {Boolean} - true if exists, false if not
  */
-const IsPartExist = (id) => Boolean(GetById(id));
+const IsPartExist = (inputPart) => Boolean(PARTS.find(part => part.name === inputPart.name && part.prefix === inputPart.prefix));
+
+const IsPartIdExist = (id) => Boolean(GetById(id));
 
 /**
  * Get a part by its id
@@ -29,16 +31,6 @@ const IsPartExist = (id) => Boolean(GetById(id));
  * @returns {{ id: string, name: string, prefix: string }} - part data
  */
 const GetById = (id) => PARTS.find((part) => part.id === id);
-
-/**
- * Create an id for a part
- * @param {{ name: string, prefix: string }} - part data: { name, prefix }
- * @returns {string} - part id
- */
-const CreateId = ({ name, prefix }) =>
-	`${prefix ? prefix.substring(0, 3).toLowerCase() : ""}${name
-		.substring(0, 3)
-		.toLowerCase()}`;
 
 /**
  * Fetch all parts from the database
@@ -80,13 +72,16 @@ const Edit = ({ id, name, prefix }) => {
 	return DB.Create(PARTS_PATH, PARTS);
 };
 
+const Backup = () => DB.Backup(PARTS_PATH);
+
 module.exports = {
 	IsPartValid,
 	IsPartExist,
+	IsPartIdExist,
 	GetById,
-	CreateId,
 	Fetch,
 	Add,
 	Delete,
 	Edit,
+	Backup
 };

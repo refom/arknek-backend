@@ -1,7 +1,6 @@
 
 const Ok = (data, message) => {
 	return {
-		status: "ok",
 		data: data,
 		message: message || "Request success"
 	}
