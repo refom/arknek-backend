@@ -28,6 +28,10 @@ router.post("/", (req, res) => {
 	// Create ID
 	acc.id = LOCATION_DB.GetNextAccId(acc.part_id);
 
+	// Check if already Exist
+	if (ACC_DB.IsAccExist(acc.id))
+		return res.status(400).send("Acc already exist");
+
 	// Save part_id and counter to local DB
 	if (!LOCATION_DB.Add(acc.id, acc.part_id, acc.counter))
 		return res.status(400).send("Failed to save location and counter");
