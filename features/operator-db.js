@@ -14,7 +14,7 @@ const OPERATORS_PATH = path.join(
  * @param {{ id: string, name: string, rarity: number }} operator - operator data to be checked
  * @returns {Boolean} - true if valid, false if invalid
  */
-const IsOperatorValid = ({ id, name, rarity }) => Boolean(id && name && rarity);
+const IsOperatorValid = ({ id, name, rarity, limited }) => Boolean(id && name && rarity && limited);
 
 /**
  * Check if the operator id exists in the database
@@ -41,7 +41,7 @@ const Backup = () => DB.Backup(OPERATORS_PATH);
  * @returns {Boolean} - true if success, false if failed
  */
 const Add = ({ id, name, rarity }) => {
-	OPERATORS.push({ id, name, rarity });
+	OPERATORS.push({ id, name, rarity, limited });
 	return DB.Create(OPERATORS_PATH, OPERATORS);
 };
 
@@ -60,13 +60,14 @@ const Delete = (id) => {
  * @param {{ oldId: string, id: string, name: string, rarity: number }} operator - operator data to be edited: { oldId, id, name, rarity }
  * @returns {Boolean} - true if success, false if failed
  */
-const Edit = ({ oldId, id, name, rarity }) => {
+const Edit = ({ oldId, id, name, rarity, limited }) => {
 	const operator = OPERATORS.find((op) => op.id === oldId);
 	if (!operator) return false;
 
 	operator.id = id;
 	operator.name = name;
 	operator.rarity = rarity;
+	operator.limited = limited;
 	return DB.Create(OPERATORS_PATH, OPERATORS);
 };
 
