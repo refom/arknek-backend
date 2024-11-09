@@ -14,7 +14,7 @@ const OPERATORS_PATH = path.join(
  * @param {{ id: string, name: string, rarity: number }} operator - operator data to be checked
  * @returns {Boolean} - true if valid, false if invalid
  */
-const IsOperatorValid = ({ id, name, rarity, limited }) => Boolean(id && name && rarity && limited);
+const IsOperatorValid = ({ id, name, rarity }) => Boolean(id && name && rarity);
 
 /**
  * Check if the operator id exists in the database
@@ -40,7 +40,7 @@ const Backup = () => DB.Backup(OPERATORS_PATH);
  * @param {{ id: string, name: string, rarity: number }} operator - operator data: { id, name, rarity }
  * @returns {Boolean} - true if success, false if failed
  */
-const Add = ({ id, name, rarity }) => {
+const Add = ({ id, name, rarity, limited }) => {
 	OPERATORS.push({ id, name, rarity, limited });
 	return DB.Create(OPERATORS_PATH, OPERATORS);
 };
