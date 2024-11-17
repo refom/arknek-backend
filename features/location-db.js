@@ -17,6 +17,8 @@ const Fetch = () => LOCATIONS = DB.Read(LOCATIONS_PATH) || [];
 
 const GetById = (id) => LOCATIONS.find((loc) => loc.id === id)
 
+const Backup = () => DB.Backup(LOCATIONS_PATH);
+
 const IsCounterExist = (part_id, counter) => {
 	const all_location = GetLocationPartId(part_id)
 	return Boolean(all_location.find((loc) => loc.counter === counter))
@@ -89,4 +91,5 @@ module.exports = {
 	Add,
 	Delete,
 	Edit,
+	Backup,
 }

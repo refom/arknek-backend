@@ -91,8 +91,8 @@ router.post("/sold/", (req, res) => {
 
 // Backup acc
 router.get("/backup", (req, res) => {
-	if (!ACC_DB.Backup())
-		return res.status(400).send("Failed to backup acc");
+	if (!ACC_DB.Backup()) return res.status(400).send("Failed to backup acc");
+	if (!LOCATION_DB.Backup()) return res.status(400).send("Failed to backup acc");
 	res.status(200).send(STATUS.Ok(ACC_DB.GetAllWithLocation(), "Backup acc"));
 });
 
