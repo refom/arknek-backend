@@ -1,62 +1,50 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const STATUS = require("./status");
-const TAG_DB = require("../features/tag-db");
-const { CreateGUID } = require("../features/helper/utils");
+import Status from "#src/utils/status.js";
+import CONTROLLER from "#controller/tag.js";
 
-// Get all tags
+const SendResult = (res, result) => {
+	if (!result.status) return Status.Bad(res, result.message);
+	return Status.Ok(res, CONTROLLER.Fetch(), result.message);
+}
+
+// GET /
+// Get all Tag
 router.get("/", (req, res) => {
-	res.status(200).send(STATUS.Ok(TAG_DB.Fetch()));
+	return Status.Ok(res, CONTROLLER.Fetch());
 });
 
-// Add new tags
+// GET /backup
+// Backup Tag
+router.get("/backup", (req, res) => {
+	const result = CONTROLLER.Backup();
+	return SendResult(res, result);
+})
+
+// POST /
+// Add new Tag
 router.post("/", (req, res) => {
 	const tag = req.body;
+	const result = CONTROLLER.Add(tag)
+	return SendResult(res, result);
+})
 
-	if (!TAG_DB.IsTagValid(tag))
-		return res.status(400).send("Data invalid");
-
-	// Create ID
-	tag.id = CreateGUID();
-	if (TAG_DB.IsTagExist(tag)) return res.status(400).send("Tag already exist");
-
-	if (!TAG_DB.Add(tag)) return res.send(STATUS.Bad("Failed to add tag"));
-	res.status(200).send(STATUS.Ok(TAG_DB.Fetch(), "Added Tag"));
-});
-
-// Delete tag
+// DELETE /:id
+// Delete Tag
 router.delete("/:id", (req, res) => {
 	const id = req.params.id;
+	const result = CONTROLLER.Delete(id)
+	return SendResult(res, result);
+})
 
-	if (!TAG_DB.IsTagIdExist(id))
-		return res.status(400).send("Tag not exist");
-	if (!TAG_DB.Delete(id))
-		return res.status(400).send("Failed to delete tag");
-	res.status(200).send(STATUS.Ok(TAG_DB.Fetch(), "Deleted Tag"));
-});
-
-// Edit acc
+// PUT /
+// Edit Tag
 router.put("/", (req, res) => {
 	const tag = req.body;
-
-	if (!(TAG_DB.IsTagValid(tag) && Boolean(tag.id))) return res.status(400).send("Data invalid");
-	if (!TAG_DB.IsTagIdExist(tag.id)) return res.status(400).send("Tag not exist");
-	if (TAG_DB.IsTagExist(tag)) return res.status(400).send("Tag already exist");
-
-	// Edit tag
-	if (!TAG_DB.Edit(tag))
-		return res.status(400).send("Failed to edit tag");
-
-	res.status(200).send(STATUS.Ok(TAG_DB.Fetch(), "Edited Tag"));
-});
-
-// Backup tag
-router.get("/backup", (req, res) => {
-	if (!TAG_DB.Backup())
-		return res.status(400).send("Failed to backup tag");
-	res.status(200).send(STATUS.Ok(TAG_DB.Fetch(), "Backup tag"));
-});
+	const result = CONTROLLER.Edit(tag)
+	return SendResult(res, result);
+})
 
 
-module.exports = router;
+export default router;

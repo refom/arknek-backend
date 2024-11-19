@@ -31,7 +31,7 @@ router.post("/", (req, res) => {
 })
 
 // DELETE /:id
-// Delete operator
+// Delete Part
 router.delete("/:id", (req, res) => {
 	const id = req.params.id;
 	const result = CONTROLLER.Delete(id)
@@ -39,10 +39,10 @@ router.delete("/:id", (req, res) => {
 })
 
 // PUT /
-// Edit operator
+// Edit Part
 router.put("/", (req, res) => {
-	const operator = req.body;
-	const result = CONTROLLER.Edit(operator)
+	const part = req.body;
+	const result = CONTROLLER.Edit(part)
 	return SendResult(res, result);
 })
 
