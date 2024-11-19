@@ -17,8 +17,9 @@ const PUBLIC_PATH = path.join(
 
 let DATA = [];
 
-const IsValid = ({ id, name, rarity }) => Boolean(id && name && rarity);
-const IsExist = (id) => Boolean(DATA.find((op) => op.id === id));
+const GetById = (id) => DATA.find((op) => op.id === id);
+const IsValid = (operator) => Boolean(operator.id && operator.name && operator.rarity);
+const IsExist = (id) => Boolean(GetById(id));
 
 
 const Fetch = () => (DATA = Database.Read(PUBLIC_PATH) || []);
@@ -46,9 +47,15 @@ const Delete = (id) => {
 
 const Edit = (operator) => {
 	if (!IsValid(operator)) return Status.Fail("Data invalid");
-	if (!IsExist(operator.id)) return Status.Fail("Operator is not exist");
+	if (!IsExist(operator.oldId)) return Status.Fail("Current Operator is not exist");
+	if (IsExist(operator.id)) return Status.Fail("Operator already exist");
 
-	DATA = DATA.map((op) => op.id === operator.id ? operator : op);
+	const op = GetById(operator.oldId);
+	op.id = operator.id;
+	op.name = operator.name;
+	op.rarity = operator.rarity;
+	op.limited = operator.limited;
+
 	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Operator");
 	return Status.Finish("Edit Operator Success");
 }

@@ -5,4 +5,4 @@ const CreateGUID = () => {
     ).replace(/\./g, "")
 }
 
-export default { CreateGUID }
+export { CreateGUID }

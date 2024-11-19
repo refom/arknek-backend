@@ -1,8 +1,7 @@
 import express, { json } from "express";
 import cors from "cors";
 import CONFIG from "#src/config.js";
-
-// import Startup from "./features/startup.js";
+import Startup from "#controller/startup.js";
 
 const app = express();
 
@@ -18,13 +17,14 @@ app.use("/", (req, res, next) => {
 
 // routes
 import operator from "#routes/operator.js";
+import part from "#routes/part.js";
+
 app.use("/operator", operator);
+app.use("/part", part);
 
 // const acc = require("./routes/acc");
 // app.use("/acc", acc);
 
-// const part = require("./routes/part");
-// app.use("/part", part);
 
 // const tag = require("./routes/tag");
 // app.use("/tag", tag);
@@ -40,5 +40,5 @@ app.get("*", (req, res) => {
 // when server start
 app.listen(CONFIG.PORT, () => {
 	console.log(`Listening on port ${CONFIG.PORT}!`);
-	// Startup();
+	Startup();
 });

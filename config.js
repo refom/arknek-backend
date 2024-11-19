@@ -4,7 +4,7 @@ const CONFIG = {
 	PORT: 3000,
 	ROOT_PATH: fileURLToPath(new URL("./", import.meta.url)),
 	PUBLIC_PATH: "db",
-	LOCAL_PATH: "D:\\Repoms\\Project\\arknights-db",
+	PRIVATE_PATH: "D:\\Repoms\\Project\\arknights-db",
 	DB: {
 		OPERATOR: "operator.json",
 		ACC: {
