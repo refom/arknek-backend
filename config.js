@@ -1,19 +1,25 @@
-const path = require("path")
+import { fileURLToPath, URL } from "node:url";
 
 const CONFIG = {
 	PORT: 3000,
-	ROOT_PATH: __dirname,
-	PUBLIC_DB: "db",
-	LOCAL_DB: "local",
-	OPERATORS_DB: "operators.json",
-	ACC_DB: "acc.json",
-	LOCATIONS_DB: "locations.json",
-	COUNTER_DB: "counter.json",
-	PARTS_DB: "part.json",
-	TAG_DB: "tag.json",
-	SOLD_DB: "sold.json",
-	DUMMY_DB: "dummy.json",
+	ROOT_PATH: fileURLToPath(new URL("./", import.meta.url)),
+	PUBLIC_PATH: "db",
+	LOCAL_PATH: "D:\\Repoms\\Project\\arknights-db",
+	DB: {
+		OPERATOR: "operator.json",
+		ACC: {
+			PUBLIC: "acc.json",
+			DETAIL: "acc_detail.json",
+			GACHA: "acc_gacha.json",
+			PRIVATE: "acc_private.json",
+			DUMMY: "acc_dummy.json",
+			SOLD: "acc_sold.json",
+		},
+		COUNTER: "counter.json",
+		COUNTER_LINK: "counter_link.json",
+		PART: "part.json",
+		TAG: "tag.json",
+	},
 }
 
-
-module.exports = CONFIG
+export default CONFIG

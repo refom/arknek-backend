@@ -1,10 +1,10 @@
 const DB = require("./helper/db-utils");
-const CONFIG = require("../config");
+const CONFIG = require("../config").default;
 const path = require("path");
 
 const TAG_PATH = path.join(
 	CONFIG.ROOT_PATH,
-	CONFIG.PUBLIC_DB,
+	CONFIG.PUBLIC_PATH,
 	CONFIG.TAG_DB
 );
 let TAGS = [];

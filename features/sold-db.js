@@ -1,5 +1,5 @@
 const DB = require("./helper/db-utils");
-const CONFIG = require("../config");
+const CONFIG = require("../config").default;
 const path = require("path");
 const { CreateGUID } = require("./helper/utils");
 
@@ -7,7 +7,7 @@ const ACC_DB = require("./acc-db");
 const LOCATION_DB = require("./location-db");
 
 let SOLDS = []
-const SOLD_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.LOCAL_DB, CONFIG.SOLD_DB)
+const SOLD_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.LOCAL_PATH, CONFIG.SOLD_DB)
 
 const GetById = (id) => SOLDS.find((sold) => sold.id === id)
 

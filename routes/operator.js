@@ -1,59 +1,49 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const STATUS = require("./status");
-const OPERATOR_DB = require("../features/operator-db");
+import Status from "#src/utils/status.js";
+import CONTROLLER from "#controller/operator.js";
 
-// Get all operators
+const SendResult = (res, result) => {
+	if (!result.status) return Status.Bad(res, result.message);
+	return Status.Ok(res, CONTROLLER.Fetch(), result.message);
+}
+
+// GET /
+// Get all Operator
 router.get("/", (req, res) => {
-	res.status(200).send(STATUS.Ok(OPERATOR_DB.Fetch()));
+	return Status.Ok(res, CONTROLLER.Fetch());
 });
 
-// Add new operator
+// GET /backup
+// Backup Operator
+router.get("/backup", (req, res) => {
+	const result = CONTROLLER.Backup();
+	return SendResult(res, result);
+})
+
+// POST /
+// Add new Operator
 router.post("/", (req, res) => {
 	const operator = req.body;
+	const result = CONTROLLER.Add(operator)
+	return SendResult(res, result);
+})
 
-	if (!OPERATOR_DB.IsOperatorValid(operator))
-		return res.status(400).send("Data invalid");
-	if (OPERATOR_DB.IsOperatorExist(operator.id))
-		return res.status(400).send("Operator already exist");
-
-	if (!OPERATOR_DB.Add(operator))
-		return res.status(400).send("Failed to add operator");
-	res.status(200).send(STATUS.Ok(OPERATOR_DB.Fetch(), "Add Operator Success"));
-});
-
+// DELETE /:id
 // Delete operator
 router.delete("/:id", (req, res) => {
 	const id = req.params.id;
+	const result = CONTROLLER.Delete(id)
+	return SendResult(res, result);
+})
 
-	if (!OPERATOR_DB.IsOperatorExist(id))
-		return res.status(400).send("Operator not exist");
-
-	if (!OPERATOR_DB.Delete(id))
-		return res.status(400).send("Failed to delete operator");
-	res.status(200).send(STATUS.Ok(OPERATOR_DB.Fetch(), "Delete Operator Success"));
-});
-
+// PUT /
 // Edit operator
 router.put("/", (req, res) => {
 	const operator = req.body;
+	const result = CONTROLLER.Edit(operator)
+	return SendResult(res, result);
+})
 
-	if (!OPERATOR_DB.IsOperatorValid(operator))
-		return res.status(400).send("Data invalid");
-	if (!OPERATOR_DB.IsOperatorExist(operator.oldId))
-		return res.status(400).send("Operator not exist");
-
-	if (!OPERATOR_DB.Edit(operator))
-		return res.status(400).send("Failed to edit operator");
-	res.status(200).send(STATUS.Ok(OPERATOR_DB.Fetch(), "Edit Operator Success"));
-});
-
-// Backup
-router.get("/backup", (req, res) => {
-	if (!OPERATOR_DB.Backup())
-		return res.status(400).send("Failed to backup operators");
-	res.status(200).send(STATUS.Ok(OPERATOR_DB.Fetch(), "Backup Operator Success"));
-});
-
-module.exports = router;
+export default router;

@@ -1,11 +1,11 @@
 const DB = require("./helper/db-utils");
-const CONFIG = require("../config");
+const CONFIG = require("../config").default;
 const path = require("path");
 
 const LOCATION_DB = require("./location-db");
 
 let ACCS = []
-const ACC_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.PUBLIC_DB, CONFIG.ACC_DB)
+const ACC_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.PUBLIC_PATH, CONFIG.ACC_DB)
 
 const GetById = (id) => ACCS.find((acc) => acc.id === id)
 

@@ -1,9 +1,9 @@
 const DB = require("./helper/db-utils");
-const CONFIG = require("../config");
+const CONFIG = require("../config").default;
 const path = require("path");
 
 let COUNTER = 0
-const COUNTER_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.LOCAL_DB, CONFIG.COUNTER_DB)
+const COUNTER_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.LOCAL_PATH, CONFIG.COUNTER_DB)
 
 /**
  * Fetch current counter value from database

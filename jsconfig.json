@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"paths": {
+			"#src/*": ["./*"],
+			"#routes/*": ["./routes/*"],
+			"#controller/*": ["./controller/*"]
+		}
+	},
+	"exclude": ["node_modules", "dist"]
+}

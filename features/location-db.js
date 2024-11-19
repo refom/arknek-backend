@@ -1,11 +1,11 @@
 const DB = require("./helper/db-utils");
-const CONFIG = require("../config");
+const CONFIG = require("../config").default;
 const path = require("path");
 
 const COUNTER_DB = require("./counter-db");
 const PARTS_DB = require("./part-db");
 
-const LOCATIONS_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.LOCAL_DB, CONFIG.LOCATIONS_DB)
+const LOCATIONS_PATH = path.join(CONFIG.ROOT_PATH, CONFIG.LOCAL_PATH, CONFIG.LOCATIONS_DB)
 let LOCATIONS = []
 
 

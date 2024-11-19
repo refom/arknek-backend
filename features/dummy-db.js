@@ -1,12 +1,12 @@
 const DB = require("./helper/db-utils");
-const CONFIG = require("../config");
+const CONFIG = require("../config").default;
 const path = require("path");
 
 const PARTS_DB = require("./part-db");
 
 const DUMMY_PATH = path.join(
 	CONFIG.ROOT_PATH,
-	CONFIG.LOCAL_DB,
+	CONFIG.LOCAL_PATH,
 	CONFIG.DUMMY_DB
 );
 let DUMMYS = [];
