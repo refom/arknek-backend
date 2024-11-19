@@ -6,10 +6,10 @@ const Startup = () => {
 	console.log("Startup Fetch");
 
 	OPERATOR.Fetch();
-	process.stdout.write("[✔️ Operator] ");
+	process.stdout.write("[✔️ Operator]");
 
 	PART.Fetch();
-	process.stdout.write("[✔️ Part] ");
+	process.stdout.write("[✔️ Part]");
 }
 
 
