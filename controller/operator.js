@@ -3,8 +3,7 @@ import CONFIG from "#src/config.js"
 import Database from "#src/utils/database.js";
 import Status from "#src/utils/status.js";
 
-// Operator : object
-// id : string
+// Operator - id : object
 // name : string
 // rarity : number
 // limited : boolean
@@ -71,15 +70,14 @@ const Edit = (operator) => {
 
 // 	old_data.forEach(op => {
 // 		DATA[op.id] = {
-// 			id: op.id,
 // 			name: op.name,
 // 			rarity: op.rarity,
 // 			limited: op.limited,
 // 			skin: op.skin || ["0"]
 // 		}
 // 	});
-// 	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Operator");
-// 	return Status.Finish("Edit Operator Success");
+// 	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to update Operator");
+// 	return Status.Finish("Update Operator Success");
 // }
 
 export default {

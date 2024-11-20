@@ -46,6 +46,13 @@ router.put("/", (req, res) => {
 	return SendResult(res, result);
 })
 
+// GET /update
+// Update Operator Data Structure
+// router.get("/update", (req, res) => {
+// 	const result = CONTROLLER.UpdateStructure();
+// 	return SendResult(res, result);
+// })
+
 // // Get all part counter
 // router.get("/counter/:id", (req, res) => {
 // 	const id = req.params.id;
