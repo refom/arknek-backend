@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, copyFileSync } from "fs";
+import { readFileSync, writeFileSync, copyFileSync, renameSync } from "fs";
 
 class Database {
 	/**
@@ -49,6 +49,16 @@ class Database {
 			return false;
 		}
 	};
+
+	static Rename(path, newPath) {
+		try {
+			renameSync(path, newPath);
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
+	}
 }
 
 

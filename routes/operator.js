@@ -46,4 +46,11 @@ router.put("/", (req, res) => {
 	return SendResult(res, result);
 })
 
+// GET /update
+// Update Operator Data Structure
+// router.get("/update", (req, res) => {
+// 	const result = CONTROLLER.UpdateOldData();
+// 	return SendResult(res, result);
+// })
+
 export default router;

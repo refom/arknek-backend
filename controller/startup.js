@@ -10,6 +10,7 @@ const Startup = () => {
 
 	PART.Fetch();
 	process.stdout.write("[✔️ Part]");
+	console.log("");
 }
 
 
