@@ -14,12 +14,18 @@ const CONFIG = {
 			PRIVATE: "acc_private.json",
 			DUMMY: "acc_dummy.json",
 			SOLD: "acc_sold.json",
+			LINK: "acc_link.json",
 		},
 		COUNTER: "counter.json",
 		COUNTER_LINK: "counter_link.json",
 		PART: "part.json",
 		TAG: "tag.json",
 	},
+	COUNTER_TYPE: {
+		PUBLIC: "public",
+		DUMMY: "dummy",
+		GACHA: "gacha",
+	}
 }
 
 export default CONFIG

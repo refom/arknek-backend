@@ -3,6 +3,8 @@ import CONFIG from "#src/config.js"
 import Database from "#src/utils/database.js";
 import Status from "#src/utils/status.js";
 
+import LINK from "./acc_link.js";
+
 // Account
 // id : string
 // created_at : string date
@@ -14,9 +16,9 @@ import Status from "#src/utils/status.js";
 // originite_prime : number
 // hh_ticket : number
 // operator : [ {
-// id : string,
-// skin : string,
-// elite : number,
+//  	id : string,
+//  	skin : string,
+//  	elite : number,
 // } ]
 
 const PUBLIC_PATH = path.join(
@@ -25,49 +27,102 @@ const PUBLIC_PATH = path.join(
 	CONFIG.DB.ACC.PUBLIC
 );
 
-let DATA = [];
+let DATA = {};
 
-const GetById = (id) => DATA.find((op) => op.id === id);
-const IsValid = (operator) => Boolean(operator.id && operator.name && operator.rarity);
-const IsExist = (id) => Boolean(GetById(id));
+const IsValid = (acc) => Boolean(
+	acc.id_part &&
+	acc.counter
+);
+const IsExist = (id) => DATA.hasOwnProperty(id);
 
 
-const Fetch = () => (DATA = Database.Read(PUBLIC_PATH) || []);
-const Backup = () => {
-	if (!Database.Backup(PUBLIC_PATH)) return Status.Fail("Failed to backup Operator");
-	return Status.Finish("Backup Operator Success");
+const Fetch = () => {
+	DATA = {};
+	const acc_public = Database.Read(PUBLIC_PATH) || {}
+	const link = LINK.Fetch();
+
+	Object.keys(acc_public).forEach((id) => {
+		DATA[id] = {
+			...acc_public[id],
+			...link.find((lk) => lk.id_acc === id)
+		}
+	})
+	return DATA
 }
 
-const Add = (operator) => {
-	if (!IsValid(operator)) return Status.Fail("Data invalid");
-	if (IsExist(operator.id)) return Status.Fail("Operator already exist");
+const Backup = () => {
+	// Backup Acc Link
+	if (!LINK.Backup()) return Status.Fail("Failed to backup Acc Link");
+	// Backup Account
+	if (!Database.Backup(PUBLIC_PATH)) return Status.Fail("Failed to backup Account");
+	return Status.Finish("Backup Account Success");
+}
 
-	DATA.push(operator);
-	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to add Operator");
-	return Status.Finish("Add Operator Success");
+const Add = (acc) => {
+	if (!IsValid(acc)) return Status.Fail("Data invalid");
+
+	// Check counter exist
+	if (LINK.IsCounterExist(acc.id_part, acc.counter)) return Status.Fail("Counter already exist");
+
+	// Create ID
+	const id = LINK.GenPublicID(acc.id_part);
+	if (IsExist(id)) return Status.Fail("Account already exist");
+
+	// Save Acc Link
+	const acc_link = {
+		id_acc: id,
+		id_part: acc.id_part,
+		counter: acc.counter
+	}
+	if (!LINK.Add(acc_link)) return Status.Fail("Failed to add Counter");
+
+	// Save Account
+	DATA[id] = acc
+	delete DATA[id].id_part
+	delete DATA[id].counter
+	DATA[id].created_at = new Date().toLocaleString()
+	DATA[id].updated_at = new Date().toLocaleString()
+
+	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to add Account");
+	return Status.Finish("Add Account Success");
 }
 
 const Delete = (id) => {
-	if (!IsExist(id)) return Status.Fail("Operator is not exist");
+	if (!IsExist(id)) return Status.Fail("Account is not exist");
 
-	DATA = DATA.filter((op) => op.id !== id);
-	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to delete Operator");
-	return Status.Finish("Delete Operator Success");
+	// Delete Acc Link
+	if (!LINK.Delete(id)) return Status.Fail("Failed to delete Counter");
+
+	// Delete Account
+	delete DATA[id];
+	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to delete Account");
+	return Status.Finish("Delete Account Success");
 }
 
-const Edit = (operator) => {
-	if (!IsValid(operator)) return Status.Fail("Data invalid");
-	if (!IsExist(operator.oldId)) return Status.Fail("Current Operator is not exist");
-	if (IsExist(operator.id)) return Status.Fail("Operator already exist");
+const Edit = (acc) => {
+	if (!IsValid(acc)) return Status.Fail("Data invalid");
+	if (!IsExist(acc.id)) return Status.Fail("Account is not exist");
 
-	const op = GetById(operator.oldId);
-	op.id = operator.id;
-	op.name = operator.name;
-	op.rarity = operator.rarity;
-	op.limited = operator.limited;
+	// Check counter exist
+	if (LINK.IsCounterExist(acc.id_part, acc.counter)) return Status.Fail("Counter already exist");
 
-	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Operator");
-	return Status.Finish("Edit Operator Success");
+	// Edit Acc Link
+	const acc_link = {
+		id_acc: acc.id,
+		id_part: acc.id_part,
+		counter: acc.counter
+	}
+	if (!LINK.Edit(acc_link)) return Status.Fail("Failed to edit Counter Account");
+
+	// Edit Account
+	DATA[acc.id] = acc
+	delete DATA[acc.id].id
+	delete DATA[acc.id].id_part
+	delete DATA[acc.id].counter
+	DATA[acc.id].updated_at = new Date().toLocaleString()
+
+	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Account");
+	return Status.Finish("Edit Account Success");
 }
 
 export default {

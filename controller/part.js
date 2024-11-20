@@ -15,11 +15,12 @@ const PRIVATE_PATH = path.join(
 
 let DATA = {};
 
+const GetById = (id) => DATA[id];
 const IsValid = (part) => Boolean(part.name);
 const IsExist = (part) => Boolean(Object.values(DATA).find((pt) => pt.name === part.name && pt.prefix === part.prefix));
 const IsIdExist = (id) => DATA.hasOwnProperty(id)
 
-const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || []);
+const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || {});
 const Backup = () => {
 	if (!Database.Backup(PRIVATE_PATH)) return Status.Fail("Failed to backup Part");
 	return Status.Finish("Backup Part Success");
@@ -69,6 +70,7 @@ const Edit = (part) => {
 // }
 
 export default {
+	GetById,
 	Fetch,
 	Backup,
 	Add,

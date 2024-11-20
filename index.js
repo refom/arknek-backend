@@ -19,13 +19,12 @@ app.use("/", (req, res, next) => {
 import operator from "#routes/operator.js";
 import part from "#routes/part.js";
 import tag from "#routes/tag.js";
+import acc from "#routes/acc.js";
 
 app.use("/operator", operator);
 app.use("/part", part);
 app.use("/tag", tag);
-
-// const acc = require("./routes/acc");
-// app.use("/acc", acc);
+app.use("/acc", acc);
 
 // const dummy = require("./routes/dummy");
 // app.use("/dummy", dummy);

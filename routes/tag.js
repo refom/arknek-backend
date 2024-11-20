@@ -10,20 +10,20 @@ const SendResult = (res, result) => {
 }
 
 // GET /
-// Get all Tag
+// Get All
 router.get("/", (req, res) => {
 	return Status.Ok(res, CONTROLLER.Fetch());
 });
 
 // GET /backup
-// Backup Tag
+// Backup
 router.get("/backup", (req, res) => {
 	const result = CONTROLLER.Backup();
 	return SendResult(res, result);
 })
 
 // POST /
-// Add new Tag
+// Add New
 router.post("/", (req, res) => {
 	const tag = req.body;
 	const result = CONTROLLER.Add(tag)
@@ -31,7 +31,7 @@ router.post("/", (req, res) => {
 })
 
 // DELETE /:id
-// Delete Tag
+// Delete
 router.delete("/:id", (req, res) => {
 	const id = req.params.id;
 	const result = CONTROLLER.Delete(id)
@@ -39,10 +39,17 @@ router.delete("/:id", (req, res) => {
 })
 
 // PUT /
-// Edit Tag
+// Edit
 router.put("/", (req, res) => {
 	const tag = req.body;
 	const result = CONTROLLER.Edit(tag)
+	return SendResult(res, result);
+})
+
+// GET /update
+// Update Data Structure
+router.get("/update", (req, res) => {
+	const result = CONTROLLER.UpdateStructure();
 	return SendResult(res, result);
 })
 
