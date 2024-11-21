@@ -29,6 +29,8 @@ const GenPublicID = (id_part) => {
 	return "ARK" + part_name.substring(0, 3).toUpperCase() + counter.toString().padStart(4, '0')
 }
 
+const GetByIdAcc = (id_acc) => DATA.find((link) => link.id_acc === id_acc)
+
 const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || []);
 const Backup = () => Database.Backup(PRIVATE_PATH)
 
@@ -53,13 +55,13 @@ const Edit = (acc_link) => {
 
 	acc.id_part = acc_link.id_part
 	acc.counter = acc_link.counter
-	acc.last_login = new Date().toLocaleString()
 	return Database.Write(PRIVATE_PATH, DATA)
 }
 
 export default {
 	IsCounterExist,
 	GenPublicID,
+	GetByIdAcc,
 	Fetch,
 	Backup,
 	Add,

@@ -46,7 +46,12 @@ router.put("/", (req, res) => {
 	return SendResult(res, result);
 })
 
-
+// GET /update
+// Update Data Structure
+// router.get("/update", (req, res) => {
+// 	const result = CONTROLLER.UpdateStructure();
+// 	return SendResult(res, result);
+// })
 
 // // Sold acc
 // router.post("/sold/", (req, res) => {

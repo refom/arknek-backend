@@ -39,12 +39,14 @@ const IsExist = (id) => DATA.hasOwnProperty(id);
 const Fetch = () => {
 	DATA = {};
 	const acc_public = Database.Read(PUBLIC_PATH) || {}
-	const link = LINK.Fetch();
 
 	Object.keys(acc_public).forEach((id) => {
+		const acc_link = LINK.GetByIdAcc(id)
 		DATA[id] = {
 			...acc_public[id],
-			...link.find((lk) => lk.id_acc === id)
+			id_part: acc_link?.id_part,
+			counter: acc_link?.counter,
+			last_login: acc_link?.last_login,
 		}
 	})
 	return DATA
@@ -53,6 +55,9 @@ const Fetch = () => {
 const Backup = () => {
 	// Backup Acc Link
 	if (!LINK.Backup()) return Status.Fail("Failed to backup Acc Link");
+
+	// Backup Acc Detail
+
 	// Backup Account
 	if (!Database.Backup(PUBLIC_PATH)) return Status.Fail("Failed to backup Account");
 	return Status.Finish("Backup Account Success");
@@ -76,12 +81,20 @@ const Add = (acc) => {
 	}
 	if (!LINK.Add(acc_link)) return Status.Fail("Failed to add Counter");
 
+	// Save Acc Detail
+
 	// Save Account
-	DATA[id] = acc
-	delete DATA[id].id_part
-	delete DATA[id].counter
-	DATA[id].created_at = new Date().toLocaleString()
-	DATA[id].updated_at = new Date().toLocaleString()
+	DATA[id] = {
+		tag: acc.tag,
+		story: acc.story,
+		six_op_length: acc.six_op_length,
+		operator: acc.operator,
+		orundum: acc.orundum,
+		originite_prime: acc.originite_prime,
+		hh_ticket: acc.hh_ticket,
+		created_at: new Date().toLocaleString(),
+		updated_at: new Date().toLocaleString(),
+	}
 
 	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to add Account");
 	return Status.Finish("Add Account Success");
@@ -92,6 +105,8 @@ const Delete = (id) => {
 
 	// Delete Acc Link
 	if (!LINK.Delete(id)) return Status.Fail("Failed to delete Counter");
+
+	// Delete Acc Detail
 
 	// Delete Account
 	delete DATA[id];
@@ -114,16 +129,53 @@ const Edit = (acc) => {
 	}
 	if (!LINK.Edit(acc_link)) return Status.Fail("Failed to edit Counter Account");
 
+	// Edit Acc Detail
+
 	// Edit Account
-	DATA[acc.id] = acc
-	delete DATA[acc.id].id
-	delete DATA[acc.id].id_part
-	delete DATA[acc.id].counter
-	DATA[acc.id].updated_at = new Date().toLocaleString()
+	DATA[acc.id] = {
+		tag: acc.tag,
+		story: acc.story,
+		six_op_length: acc.six_op_length,
+		operator: acc.operator,
+		orundum: acc.orundum,
+		originite_prime: acc.originite_prime,
+		hh_ticket: acc.hh_ticket,
+		updated_at: new Date().toLocaleString(),
+	}
 
 	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Account");
 	return Status.Finish("Edit Account Success");
 }
+
+
+// const UpdateStructure = () => {
+// 	DATA = {}
+// 	const old = Database.Read(PUBLIC_PATH);
+
+// 	old.forEach(acc => {
+// 		console.log(acc)
+// 		const operator = acc.operator.map(op => {
+// 			return {
+// 				id: op,
+// 				skin: "0",
+// 				elite: 0
+// 			}
+// 		})
+// 		DATA[acc.id] = {
+// 			tag: acc.tag,
+// 			story: acc.story,
+// 			six_op_length: acc.six_op_length,
+// 			operator: operator,
+// 			orundum: acc.orundum,
+// 			originite_prime: acc.originite_prime,
+// 			hh_ticket: acc.hh_ticket,
+// 			created_at: acc.created_at,
+// 			updated_at: acc.updated_at,
+// 		}
+// 	});
+// 	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to update Acc");
+// 	return Status.Finish("Update Acc Success");
+// }
 
 export default {
 	Fetch,
@@ -131,4 +183,5 @@ export default {
 	Add,
 	Delete,
 	Edit,
+	// UpdateStructure,
 }
