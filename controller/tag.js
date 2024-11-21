@@ -6,6 +6,7 @@ import { CreateGUID } from "#src/utils/helper.js";
 
 // Tag - id : object
 // name : string
+// alias : string
 // rarity : number
 // description : string
 

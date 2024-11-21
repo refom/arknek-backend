@@ -53,6 +53,13 @@ router.put("/", (req, res) => {
 // 	return SendResult(res, result);
 // })
 
+// GET /ping
+// Test data
+router.get("/ping", (req, res) => {
+	const result = CONTROLLER.Ping();
+	return SendResult(res, result);
+})
+
 // // Sold acc
 // router.post("/sold/", (req, res) => {
 // 	const acc = req.body;
@@ -63,13 +70,6 @@ router.put("/", (req, res) => {
 
 // 	res.status(200).send(STATUS.Ok(ACC_DB.GetAllWithLocation(), "Sold Acc"));
 // })
-
-// // Backup acc
-// router.get("/backup", (req, res) => {
-// 	if (!ACC_DB.Backup()) return res.status(400).send("Failed to backup acc");
-// 	if (!LOCATION_DB.Backup()) return res.status(400).send("Failed to backup acc");
-// 	res.status(200).send(STATUS.Ok(ACC_DB.GetAllWithLocation(), "Backup acc"));
-// });
 
 
 export default router;

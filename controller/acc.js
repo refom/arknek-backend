@@ -147,31 +147,54 @@ const Edit = (acc) => {
 	return Status.Finish("Edit Account Success");
 }
 
+const Ping = () => {
+	DATA = {}
+	const old = Database.Read(PUBLIC_PATH);
+
+	Object.keys(old).forEach(acc => {
+		console.log(old[acc].operator.map(op => {
+			return {
+				id: op.id,
+				skin: ["0"],
+				elite: 0
+			}
+		}))
+	})
+	return Status.Finish("Ping Acc");
+}
+
 
 // const UpdateStructure = () => {
-// 	DATA = {}
-// 	const old = Database.Read(PUBLIC_PATH);
+// 	// DATA = {}
+// 	// const old = Database.Read(PUBLIC_PATH);
+// 	DATA = Database.Read(PUBLIC_PATH);
 
-// 	old.forEach(acc => {
-// 		console.log(acc)
-// 		const operator = acc.operator.map(op => {
+// 	Object.keys(DATA).forEach(acc => {
+// 		// const operator = acc.operator.map(op => {
+// 		// 	return {
+// 		// 		id: op,
+// 		// 		skin: ["0"],
+// 		// 		elite: 0
+// 		// 	}
+// 		// })
+// 		// DATA[acc.id] = {
+// 		// 	tag: acc.tag,
+// 		// 	story: acc.story,
+// 		// 	six_op_length: acc.six_op_length,
+// 		// 	operator: operator,
+// 		// 	orundum: acc.orundum,
+// 		// 	originite_prime: acc.originite_prime,
+// 		// 	hh_ticket: acc.hh_ticket,
+// 		// 	created_at: acc.created_at,
+// 		// 	updated_at: acc.updated_at,
+// 		// }
+// 		DATA[acc].operator = DATA[acc].operator.map(op => {
 // 			return {
-// 				id: op,
-// 				skin: "0",
+// 				id: op.id,
+// 				skin: ["0"],
 // 				elite: 0
 // 			}
 // 		})
-// 		DATA[acc.id] = {
-// 			tag: acc.tag,
-// 			story: acc.story,
-// 			six_op_length: acc.six_op_length,
-// 			operator: operator,
-// 			orundum: acc.orundum,
-// 			originite_prime: acc.originite_prime,
-// 			hh_ticket: acc.hh_ticket,
-// 			created_at: acc.created_at,
-// 			updated_at: acc.updated_at,
-// 		}
 // 	});
 // 	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to update Acc");
 // 	return Status.Finish("Update Acc Success");
@@ -183,5 +206,6 @@ export default {
 	Add,
 	Delete,
 	Edit,
+	Ping,
 	// UpdateStructure,
 }

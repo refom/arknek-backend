@@ -18,6 +18,8 @@ const Startup = () => {
 	process.stdout.write("[✔️ Tag]");
 
 	LINK.Fetch();
+	process.stdout.write("[✔️ Acc Link]");
+	
 	ACC.Fetch();
 	process.stdout.write("[✔️ Acc]");
 	console.log("");

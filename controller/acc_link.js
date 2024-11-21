@@ -10,6 +10,7 @@ import COUNTER from "./counter.js";
 // id_part : string
 // counter : number
 // last_login : string date
+// is_private : boolean
 
 const PRIVATE_PATH = path.join(
 	CONFIG.PRIVATE_PATH,
