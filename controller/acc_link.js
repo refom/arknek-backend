@@ -24,13 +24,32 @@ const IsCounterExist = (id_part, counter) => {
 	return Boolean(part_counter.find((link) => link.counter === counter))
 }
 
+const IsAccExist = (id_acc) => Boolean(DATA.find((link) => link.id_acc === id_acc))
+
 const GenPublicID = (id_part) => {
 	const part_name = PART.GetById(id_part).name
 	const counter = COUNTER.Add(CONFIG.COUNTER_TYPE.PUBLIC)
 	return "ARK" + part_name.substring(0, 3).toUpperCase() + counter.toString().padStart(4, '0')
 }
 
-const GetByIdAcc = (id_acc) => DATA.find((link) => link.id_acc === id_acc)
+const Build = (acc) => {
+	return {
+		id_acc: acc.id,
+		id_part: acc.id_part,
+		counter: acc.counter,
+		is_private: acc.is_private,
+	}
+}
+
+const GetByIdAcc = (id_acc) => {
+	const acc = DATA.find((link) => link.id_acc === id_acc)
+	return {
+		id_part: acc?.id_part,
+		counter: acc?.counter,
+		last_login: acc?.last_login,
+		is_private: acc?.is_private
+	}
+}
 
 const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || []);
 const Backup = () => Database.Backup(PRIVATE_PATH)
@@ -41,6 +60,7 @@ const Add = (acc_link) => {
 		id_part: acc_link.id_part,
 		counter: acc_link.counter,
 		last_login: new Date().toLocaleString(),
+		is_private: acc_link.is_private
 	})
 	return Database.Write(PRIVATE_PATH, DATA)
 }
@@ -56,12 +76,15 @@ const Edit = (acc_link) => {
 
 	acc.id_part = acc_link.id_part
 	acc.counter = acc_link.counter
+	acc.is_private = acc_link.is_private
 	return Database.Write(PRIVATE_PATH, DATA)
 }
 
 export default {
 	IsCounterExist,
+	IsAccExist,
 	GenPublicID,
+	Build,
 	GetByIdAcc,
 	Fetch,
 	Backup,

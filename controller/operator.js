@@ -24,6 +24,7 @@ const IsValid = (operator) => Boolean(
 	operator.skin?.length
 );
 const IsExist = (id) => DATA.hasOwnProperty(id);
+const CountSixOp = (operator_list) => operator_list.filter((operator) => DATA[operator.id].rarity === 6).length
 
 
 const Fetch = () => (DATA = Database.Read(PUBLIC_PATH) || {});
@@ -81,6 +82,7 @@ const Edit = (operator) => {
 // }
 
 export default {
+	CountSixOp,
 	Fetch,
 	Backup,
 	Add,

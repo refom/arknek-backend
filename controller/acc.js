@@ -3,10 +3,13 @@ import CONFIG from "#src/config.js"
 import Database from "#src/utils/database.js";
 import Status from "#src/utils/status.js";
 
+import PRIVATE from "./acc_private.js";
 import LINK from "./acc_link.js";
+import OPERATOR from "./operator.js";
 
 // Account
 // id : string
+// is_private : boolean
 // created_at : string date
 // updated_at : string date
 // tag : [string]
@@ -19,6 +22,7 @@ import LINK from "./acc_link.js";
 //  	id : string,
 //  	skin : string,
 //  	elite : number,
+//  	pot : number
 // } ]
 
 const PUBLIC_PATH = path.join(
@@ -33,23 +37,30 @@ const IsValid = (acc) => Boolean(
 	acc.id_part &&
 	acc.counter
 );
-const IsExist = (id) => DATA.hasOwnProperty(id);
 
+const Build = (acc) => {
+	return {
+		tag: acc.tag,
+		story: acc.story,
+		six_op_length: OPERATOR.CountSixOp(acc.operator),
+		operator: acc.operator,
+		orundum: acc.orundum,
+		originite_prime: acc.originite_prime,
+		hh_ticket: acc.hh_ticket,
+	}
+}
 
-const Fetch = () => {
-	DATA = {};
-	const acc_public = Database.Read(PUBLIC_PATH) || {}
+const Fetch = (is_private = false) => {
+	const NEW_DATA = {};
+	const acc = is_private ? PRIVATE.Fetch() : DATA = Database.Read(PUBLIC_PATH) || {};
 
-	Object.keys(acc_public).forEach((id) => {
-		const acc_link = LINK.GetByIdAcc(id)
-		DATA[id] = {
-			...acc_public[id],
-			id_part: acc_link?.id_part,
-			counter: acc_link?.counter,
-			last_login: acc_link?.last_login,
+	Object.keys(acc).forEach((id) => {
+		NEW_DATA[id] = {
+			...acc[id],
+			...LINK.GetByIdAcc(id),
 		}
 	})
-	return DATA
+	return NEW_DATA
 }
 
 const Backup = () => {
@@ -59,7 +70,8 @@ const Backup = () => {
 	// Backup Acc Detail
 
 	// Backup Account
-	if (!Database.Backup(PUBLIC_PATH)) return Status.Fail("Failed to backup Account");
+	if (!PRIVATE.Backup()) return Status.Fail("Failed to backup Private Account");
+	if (!Database.Backup(PUBLIC_PATH)) return Status.Fail("Failed to backup Public Account");
 	return Status.Finish("Backup Account Success");
 }
 
@@ -70,96 +82,98 @@ const Add = (acc) => {
 	if (LINK.IsCounterExist(acc.id_part, acc.counter)) return Status.Fail("Counter already exist");
 
 	// Create ID
-	const id = LINK.GenPublicID(acc.id_part);
-	if (IsExist(id)) return Status.Fail("Account already exist");
+	acc.id = LINK.GenPublicID(acc.id_part);
+	if (LINK.IsAccExist(acc.id)) return Status.Fail("Account already exist");
 
 	// Save Acc Link
-	const acc_link = {
-		id_acc: id,
-		id_part: acc.id_part,
-		counter: acc.counter
-	}
+	const acc_link = LINK.Build(acc)
 	if (!LINK.Add(acc_link)) return Status.Fail("Failed to add Counter");
 
 	// Save Acc Detail
 
-	// Save Account
-	DATA[id] = {
-		tag: acc.tag,
-		story: acc.story,
-		six_op_length: acc.six_op_length,
-		operator: acc.operator,
-		orundum: acc.orundum,
-		originite_prime: acc.originite_prime,
-		hh_ticket: acc.hh_ticket,
-		created_at: new Date().toLocaleString(),
-		updated_at: new Date().toLocaleString(),
-	}
+	// Create Data
+	const NEW_ACC = Build(acc)
+	NEW_ACC.created_at = new Date().toLocaleString()
+	NEW_ACC.updated_at = new Date().toLocaleString()
 
-	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to add Account");
+	// Save Account Private or Public
+	if (acc.is_private) {
+		if (!PRIVATE.Add(acc.id, NEW_ACC)) return Status.Fail("Failed to add Account");
+	} else {
+		DATA[acc.id] = NEW_ACC;
+		if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to add Account");
+	}
+	
 	return Status.Finish("Add Account Success");
 }
 
 const Delete = (id) => {
-	if (!IsExist(id)) return Status.Fail("Account is not exist");
+	if (!LINK.IsAccExist(id)) return Status.Fail("Account is not exist");
+	const acc = LINK.GetByIdAcc(id);
 
 	// Delete Acc Link
 	if (!LINK.Delete(id)) return Status.Fail("Failed to delete Counter");
 
 	// Delete Acc Detail
 
-	// Delete Account
-	delete DATA[id];
-	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to delete Account");
+	// Delete Acc
+	if (acc.is_private) {
+		if (!PRIVATE.Delete(id)) return Status.Fail("Failed to delete Account");
+	} else {
+		delete DATA[id];
+		if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to delete Account");
+	}
+
 	return Status.Finish("Delete Account Success");
 }
 
 const Edit = (acc) => {
 	if (!IsValid(acc)) return Status.Fail("Data invalid");
-	if (!IsExist(acc.id)) return Status.Fail("Account is not exist");
-
+	if (!LINK.IsAccExist(acc.id)) return Status.Fail("Account is not exist");
+	
 	// Check counter exist
 	if (LINK.IsCounterExist(acc.id_part, acc.counter)) return Status.Fail("Counter already exist");
-
+	
 	// Edit Acc Link
-	const acc_link = {
-		id_acc: acc.id,
-		id_part: acc.id_part,
-		counter: acc.counter
-	}
+	const old_is_private = LINK.GetByIdAcc(acc.id).is_private
+	const acc_link = LINK.Build(acc)
 	if (!LINK.Edit(acc_link)) return Status.Fail("Failed to edit Counter Account");
 
 	// Edit Acc Detail
 
 	// Edit Account
-	DATA[acc.id] = {
-		tag: acc.tag,
-		story: acc.story,
-		six_op_length: acc.six_op_length,
-		operator: acc.operator,
-		orundum: acc.orundum,
-		originite_prime: acc.originite_prime,
-		hh_ticket: acc.hh_ticket,
-		updated_at: new Date().toLocaleString(),
+	const old_acc = old_is_private ? PRIVATE.GetById(acc.id) : DATA[acc.id]
+
+	const EDITED_ACC = Build(acc)
+	EDITED_ACC.created_at = old_acc.created_at
+	EDITED_ACC.updated_at = new Date().toLocaleString()
+
+	// Edit Account Private or Public
+	if (acc.is_private) {
+		if (!old_is_private) delete DATA[acc.id];
+		if (!PRIVATE.Add(acc.id, EDITED_ACC)) return Status.Fail("Failed to edit Account");
+	} else {
+		if (old_is_private) PRIVATE.Delete(acc.id);
+		DATA[acc.id] = EDITED_ACC;
+		if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Account");
 	}
 
-	if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Account");
 	return Status.Finish("Edit Account Success");
 }
 
 const Ping = () => {
-	DATA = {}
-	const old = Database.Read(PUBLIC_PATH);
+	// DATA = {}
+	// const old = Database.Read(PUBLIC_PATH);
 
-	Object.keys(old).forEach(acc => {
-		console.log(old[acc].operator.map(op => {
-			return {
-				id: op.id,
-				skin: ["0"],
-				elite: 0
-			}
-		}))
-	})
+	// Object.keys(old).forEach(acc => {
+	// 	console.log(old[acc].operator.map(op => {
+	// 		return {
+	// 			id: op.id,
+	// 			skin: ["0"],
+	// 			elite: 0
+	// 		}
+	// 	}))
+	// })
 	return Status.Finish("Ping Acc");
 }
 
@@ -174,7 +188,8 @@ const Ping = () => {
 // 		// 	return {
 // 		// 		id: op,
 // 		// 		skin: ["0"],
-// 		// 		elite: 0
+// 		// 		elite: 0,
+// 		// 		pot: 0,
 // 		// 	}
 // 		// })
 // 		// DATA[acc.id] = {
@@ -192,7 +207,8 @@ const Ping = () => {
 // 			return {
 // 				id: op.id,
 // 				skin: ["0"],
-// 				elite: 0
+// 				elite: 0,
+// 				pot: 0,
 // 			}
 // 		})
 // 	});

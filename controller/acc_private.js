@@ -1,7 +1,6 @@
 import path from "path"
 import CONFIG from "#src/config.js"
 import Database from "#src/utils/database.js";
-import Status from "#src/utils/status.js";
 
 const PRIVATE_PATH = path.join(
 	CONFIG.PRIVATE_PATH,
@@ -10,47 +9,38 @@ const PRIVATE_PATH = path.join(
 
 let DATA = {}
 
-const IsExist = (id) => DATA.hasOwnProperty(id);
-
-const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || {});
-const Backup = () => {
-	if (!Database.Backup(PRIVATE_PATH)) return Status.Fail("Failed to backup Part");
-	return Status.Finish("Backup Part Success");
+const GetById = (id) => {
+	const acc = DATA[id]
+	return {
+		tag: acc.tag,
+		story: acc.story,
+		six_op_length: acc.six_op_length,
+		operator: acc.operator,
+		orundum: acc.orundum,
+		originite_prime: acc.originite_prime,
+		hh_ticket: acc.hh_ticket,
+		created_at: acc.created_at,
+		updated_at: acc.updated_at
+	}
 }
 
-const Add = (part) => {
-	if (!IsValid(part)) return Status.Fail("Data invalid");
-	if (IsExist(part)) return Status.Fail("Part already exist");
+const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || {})
+const Backup = () => Database.Backup(PRIVATE_PATH)
 
-	const id = CreateGUID();
-	DATA[id] = part;
-	if (!Database.Write(PRIVATE_PATH, DATA)) return Status.Fail("Failed to add Part");
-	return Status.Finish("Add Part Success");
+const Add = (id, acc) => {
+	DATA[id] = acc
+	return Database.Write(PRIVATE_PATH, DATA)
 }
 
 const Delete = (id) => {
-	if (!IsIdExist(id)) return Status.Fail("Part is not exist");
-
 	delete DATA[id];
-	if (!Database.Write(PRIVATE_PATH, DATA)) return Status.Fail("Failed to delete Part");
-	return Status.Finish("Delete Part Success");
-}
-
-const Edit = (part) => {
-	if (!IsValid(part)) return Status.Fail("Data invalid");
-	if (!IsIdExist(part.id)) return Status.Fail("Part is not exist");
-	if (IsExist(part)) return Status.Fail("Part already exist");
-
-	DATA[part.id] = part
-	delete DATA[part.id].id
-	if (!Database.Write(PRIVATE_PATH, DATA)) return Status.Fail("Failed to edit Part");
-	return Status.Finish("Edit Part Success");
+	return Database.Write(PRIVATE_PATH, DATA)
 }
 
 export default {
+	GetById,
 	Fetch,
 	Backup,
 	Add,
 	Delete,
-	Edit,
 }

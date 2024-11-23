@@ -10,9 +10,15 @@ const SendResult = (res, result) => {
 }
 
 // GET /
-// Get All
+// Get All Public
 router.get("/", (req, res) => {
 	return Status.Ok(res, CONTROLLER.Fetch());
+});
+
+// GET /private
+// Get All Private
+router.get("/private", (req, res) => {
+	return Status.Ok(res, CONTROLLER.Fetch(true));
 });
 
 // GET /backup
