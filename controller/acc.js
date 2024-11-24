@@ -5,6 +5,7 @@ import Status from "#src/utils/status.js";
 
 import PRIVATE from "./acc_private.js";
 import LINK from "./acc_link.js";
+import DETAIL from "./acc_detail.js";
 import OPERATOR from "./operator.js";
 
 // Account
@@ -93,10 +94,10 @@ const Add = (acc) => {
 	if (LINK.IsAccExist(acc.id)) return Status.Fail("Account already exist");
 
 	// Save Acc Link
-	const acc_link = LINK.Build(acc)
-	if (!LINK.Add(acc_link)) return Status.Fail("Failed to add Counter");
+	if (!LINK.Add(acc)) return Status.Fail("Failed to add Counter");
 
 	// Save Acc Detail
+	if (!DETAIL.Add(acc)) return Status.Fail("Failed to add Detail");
 
 	// Create Data
 	const NEW_ACC = Build(acc)
@@ -122,6 +123,7 @@ const Delete = (id) => {
 	if (!LINK.Delete(id)) return Status.Fail("Failed to delete Counter");
 
 	// Delete Acc Detail
+	if (!DETAIL.Delete(id, acc.is_private)) return Status.Fail("Failed to delete Detail");
 
 	// Delete Acc
 	if (acc.is_private) {
@@ -143,10 +145,10 @@ const Edit = (acc) => {
 	
 	// Edit Acc Link
 	const old_link = LINK.GetByIdAcc(acc.id)
-	const acc_link = LINK.Build(acc)
-	if (!LINK.Edit(acc_link)) return Status.Fail("Failed to edit Counter Account");
+	if (!LINK.Edit(acc)) return Status.Fail("Failed to edit Counter Account");
 
 	// Edit Acc Detail
+	if (!DETAIL.Edit(acc, old_link)) return Status.Fail("Failed to edit Detail Account");
 
 	// Edit Account
 	const old_acc = old_link.is_private ? PRIVATE.GetById(acc.id) : DATA[acc.id]

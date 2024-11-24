@@ -23,10 +23,7 @@ const Fetch = () => {
 	return DATA
 }
 
-const Backup = () => {
-	if (!Database.Backup(PRIVATE_PATH)) return Status.Fail("Failed to backup Counter");
-	return Status.Finish("Backup Counter Success");
-}
+const Backup = () => Database.Backup(PRIVATE_PATH)
 
 const Add = (counter_type) => {
 	DATA[counter_type] = Boolean(DATA[counter_type]) ? DATA[counter_type] + 1 : 1;

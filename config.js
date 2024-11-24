@@ -5,6 +5,11 @@ const CONFIG = {
 	ROOT_PATH: fileURLToPath(new URL("./", import.meta.url)),
 	PUBLIC_PATH: "db",
 	PRIVATE_PATH: "D:\\Repoms\\Project\\arknights-db",
+	ID_CODE: {
+		PUBLIC: "ARK",
+		DUMMY: "DUM",
+		GACHA: "GAC",
+	},
 	DB: {
 		OPERATOR: "operator.json",
 		ACC: {
