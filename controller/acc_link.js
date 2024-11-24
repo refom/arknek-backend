@@ -19,12 +19,13 @@ const PRIVATE_PATH = path.join(
 
 let DATA = []
 
-const IsCounterExist = (id_part, counter) => {
+const IsCounterExist = (id_part, counter, id_acc) => {
 	const part_counter = DATA.filter((link) => link.id_part === id_part)
-	return Boolean(part_counter.find((link) => link.counter === counter))
+	// Check if counter exists without matching id_acc
+	return part_counter.some((link) => link.counter === counter && link.id_acc !== id_acc)
 }
 
-const IsAccExist = (id_acc) => Boolean(DATA.find((link) => link.id_acc === id_acc))
+const IsAccExist = (id_acc) => DATA.some((link) => link.id_acc === id_acc)
 
 const GenPublicID = (id_part) => {
 	const part_name = PART.GetById(id_part).name
@@ -51,7 +52,13 @@ const GetByIdAcc = (id_acc) => {
 	}
 }
 
-const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || []);
+const Fetch = () => {
+	DATA = Database.Read(PRIVATE_PATH)
+	if (DATA !== null) return DATA;
+	DATA = []
+	Database.Write(PRIVATE_PATH, DATA)
+	return DATA
+}
 const Backup = () => Database.Backup(PRIVATE_PATH)
 
 const Add = (acc_link) => {

@@ -19,7 +19,7 @@ const PUBLIC_PATH = path.join(
 let DATA = {};
 
 const IsValid = (tag) => Boolean(tag.name && tag.rarity);
-const IsExist = (tag) => Boolean(Object.values(DATA).find((tg) => tg.name === tag.name && tg.rarity === tag.rarity));
+const IsExist = (tag) => Object.values(DATA).some((tg) => tg.name === tag.name && tg.rarity === tag.rarity);
 const IsIdExist = (id) => DATA.hasOwnProperty(id)
 
 const Fetch = () => (DATA = Database.Read(PUBLIC_PATH) || {});

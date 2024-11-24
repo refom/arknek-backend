@@ -24,7 +24,13 @@ const GetById = (id) => {
 	}
 }
 
-const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || {})
+const Fetch = () => {
+	DATA = Database.Read(PRIVATE_PATH)
+	if (DATA !== null) return DATA;
+	DATA = {}
+	Database.Write(PRIVATE_PATH, DATA)
+	return DATA
+}
 const Backup = () => Database.Backup(PRIVATE_PATH)
 
 const Add = (id, acc) => {

@@ -9,15 +9,17 @@ import OPERATOR from "./operator.js";
 
 // Account
 // id : string
-// is_private : boolean
+// six_op_length : number
 // created_at : string date
 // updated_at : string date
+// id_part : string
+// counter : number
 // tag : [string]
-// six_op_length : number
 // story : string
 // orundum : number
 // originite_prime : number
 // hh_ticket : number
+// is_private : boolean
 // operator : [ {
 //  	id : string,
 //  	skin : string,
@@ -37,6 +39,11 @@ const IsValid = (acc) => Boolean(
 	acc.id_part &&
 	acc.counter
 );
+
+const Remove = (id) => {
+	delete DATA[id];
+	return Database.Write(PUBLIC_PATH, DATA)
+}
 
 const Build = (acc) => {
 	return {
@@ -132,17 +139,17 @@ const Edit = (acc) => {
 	if (!LINK.IsAccExist(acc.id)) return Status.Fail("Account is not exist");
 	
 	// Check counter exist
-	if (LINK.IsCounterExist(acc.id_part, acc.counter)) return Status.Fail("Counter already exist");
+	if (LINK.IsCounterExist(acc.id_part, acc.counter, acc.id)) return Status.Fail("Counter already exist");
 	
 	// Edit Acc Link
-	const old_is_private = LINK.GetByIdAcc(acc.id).is_private
+	const old_link = LINK.GetByIdAcc(acc.id)
 	const acc_link = LINK.Build(acc)
 	if (!LINK.Edit(acc_link)) return Status.Fail("Failed to edit Counter Account");
 
 	// Edit Acc Detail
 
 	// Edit Account
-	const old_acc = old_is_private ? PRIVATE.GetById(acc.id) : DATA[acc.id]
+	const old_acc = old_link.is_private ? PRIVATE.GetById(acc.id) : DATA[acc.id]
 
 	const EDITED_ACC = Build(acc)
 	EDITED_ACC.created_at = old_acc.created_at
@@ -150,12 +157,16 @@ const Edit = (acc) => {
 
 	// Edit Account Private or Public
 	if (acc.is_private) {
-		if (!old_is_private) delete DATA[acc.id];
-		if (!PRIVATE.Add(acc.id, EDITED_ACC)) return Status.Fail("Failed to edit Account");
+		if (!old_link.is_private) {
+			if (!Remove(acc.id)) Status.Fail("Failed to edit > delete Public Account");
+		}
+		if (!PRIVATE.Add(acc.id, EDITED_ACC)) return Status.Fail("Failed to edit Private Account");
 	} else {
-		if (old_is_private) PRIVATE.Delete(acc.id);
+		if (old_link.is_private) {
+			if (!PRIVATE.Delete(acc.id)) Status.Fail("Failed to edit > delete Private Account");
+		}
 		DATA[acc.id] = EDITED_ACC;
-		if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Account");
+		if (!Database.Write(PUBLIC_PATH, DATA)) return Status.Fail("Failed to edit Public Account");
 	}
 
 	return Status.Finish("Edit Account Success");

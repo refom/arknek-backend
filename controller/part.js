@@ -15,9 +15,15 @@ const PRIVATE_PATH = path.join(
 
 let DATA = {};
 
-const GetById = (id) => DATA[id];
+const GetById = (id) => {
+	const part = DATA[id];
+	return {
+		name: part.name,
+		prefix: part.prefix
+	}
+}
 const IsValid = (part) => Boolean(part.name);
-const IsExist = (part) => Boolean(Object.values(DATA).find((pt) => pt.name === part.name && pt.prefix === part.prefix));
+const IsExist = (part) => Object.values(DATA).some((pt) => pt.name === part.name && pt.prefix === part.prefix);
 const IsIdExist = (id) => DATA.hasOwnProperty(id)
 
 const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || {});
