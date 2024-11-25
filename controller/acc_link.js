@@ -27,11 +27,14 @@ const IsCounterExist = (id_part, counter, id_acc) => {
 
 const IsAccExist = (id_acc) => DATA.some((link) => link.id_acc === id_acc)
 
-const GenPublicID = (id_part) => {
+const GenID = (id_code, id_part, counter_type) => {
 	const part_name = PART.GetById(id_part).name
-	const counter = COUNTER.Add(CONFIG.COUNTER_TYPE.PUBLIC)
-	return CONFIG.ID_CODE.PUBLIC + part_name.substring(0, 3).toUpperCase() + counter.toString().padStart(4, '0')
+	const counter = COUNTER.Add(counter_type)
+	return id_code + part_name.substring(0, 3).toUpperCase() + counter.toString().padStart(6, '0')
 }
+
+const GenPublicID = (id_part) => GenID(CONFIG.ID_CODE.PUBLIC, id_part, CONFIG.COUNTER_TYPE.PUBLIC)
+const GenDummyID = (id_part) => GenID(CONFIG.ID_CODE.DUMMY, id_part, CONFIG.COUNTER_TYPE.DUMMY)
 
 const GetByIdAcc = (id_acc) => {
 	const acc = DATA.find((link) => link.id_acc === id_acc)
@@ -63,17 +66,23 @@ const Add = (acc) => {
 	return Database.Write(PRIVATE_PATH, DATA)
 }
 
-const Delete = (id_acc) => {
-	DATA = DATA.filter((link) => link.id_acc !== id_acc)
+const Delete = (id) => {
+	DATA = DATA.filter((link) => link.id_acc !== id)
 	return Database.Write(PRIVATE_PATH, DATA)
 }
 
 const Edit = (acc) => {
-	const acc = DATA.find((link) => link.id_acc === acc.id)
+	const acc_data = DATA.find((link) => link.id_acc === acc.id)
 
-	acc.id_part = acc.id_part
-	acc.counter = acc.counter
-	acc.is_private = acc.is_private
+	acc_data.id_part = acc.id_part
+	acc_data.counter = acc.counter
+	acc_data.is_private = acc.is_private
+	return Database.Write(PRIVATE_PATH, DATA)
+}
+
+const Login = (id) => {
+	const acc = DATA.find((link) => link.id_acc === id)
+	acc.last_login = new Date().toLocaleString()
 	return Database.Write(PRIVATE_PATH, DATA)
 }
 
@@ -81,10 +90,12 @@ export default {
 	IsCounterExist,
 	IsAccExist,
 	GenPublicID,
+	GenDummyID,
 	GetByIdAcc,
 	Fetch,
 	Backup,
 	Add,
 	Delete,
 	Edit,
+	Login,
 }

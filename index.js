@@ -20,14 +20,13 @@ import operator from "#routes/operator.js";
 import part from "#routes/part.js";
 import tag from "#routes/tag.js";
 import acc from "#routes/acc.js";
+import dummy from "#routes/dummy.js";
 
 app.use("/operator", operator);
 app.use("/part", part);
 app.use("/tag", tag);
 app.use("/acc", acc);
-
-// const dummy = require("./routes/dummy");
-// app.use("/dummy", dummy);
+app.use("/dummy", dummy);
 
 // not found
 app.get("*", (req, res) => {

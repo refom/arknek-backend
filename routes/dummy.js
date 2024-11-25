@@ -1,35 +1,57 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const STATUS = require("./status");
-const DUMMY_DB = require("../features/dummy-db");
+import Status from "#src/utils/status.js";
+import CONTROLLER from "#src/controller/dummy.js";
 
-// Get all dummies
+const SendResult = (res, result) => {
+	if (!result.status) return Status.Bad(res, result.message);
+	return Status.Ok(res, CONTROLLER.Fetch(), result.message);
+}
+
+// GET /
+// Get All
 router.get("/", (req, res) => {
-	res.status(200).send(STATUS.Ok(DUMMY_DB.Fetch()));
+	return Status.Ok(res, CONTROLLER.Fetch());
+});
+
+// GET /backup
+// Backup
+router.get("/backup", (req, res) => {
+	const result = CONTROLLER.Backup();
+	return SendResult(res, result);
 })
 
-// Add new dummy
+// POST /
+// Add New
 router.post("/", (req, res) => {
-	const dummy = req.body;
+	const acc = req.body;
+	const result = CONTROLLER.Add(acc)
+	return SendResult(res, result);
+})
 
-	if (!DUMMY_DB.IsDummyValid(dummy)) return res.status(400).send("Data invalid");
-	if (DUMMY_DB.IsDummyCounterExist(dummy.part_id, dummy.counter)) return res.status(400).send("Counter already exist");
+// DELETE /:id
+// Delete
+router.delete("/:id", (req, res) => {
+	const id = req.params.id;
+	const result = CONTROLLER.Delete(id)
+	return SendResult(res, result);
+})
 
-	if (!DUMMY_DB.Add(dummy)) return res.status(400).send("Failed to add dummy");
-	res.status(200).send(STATUS.Ok(DUMMY_DB.Fetch(), "Added Dummy"));
-});
+// PUT /
+// Reuse
+router.put("/:id", (req, res) => {
+	const id = req.params.id;
+	const result = CONTROLLER.Reuse(id)
+	return SendResult(res, result);
+})
 
-// Delete counter dummy
-router.delete("/:part/:counter", (req, res) => {
-	const counter = parseInt(req.params.counter);
-	const part_id = req.params.part;
+// GET /update
+// Update Data Structure
+router.get("/update", (req, res) => {
+	const result = CONTROLLER.Update();
+	return SendResult(res, result);
+})
 
-	console.log(DUMMY_DB.IsDummyCounterExist(part_id, counter))
-	if (!DUMMY_DB.IsDummyCounterExist(part_id, counter)) return res.status(400).send("Counter not exist");
 
-	if (!DUMMY_DB.Delete(part_id, counter)) return res.status(400).send("Failed to delete counter");
-	res.status(200).send(STATUS.Ok(DUMMY_DB.Fetch(), "Deleted Counter"));
-});
-
-module.exports = router;
+export default router;

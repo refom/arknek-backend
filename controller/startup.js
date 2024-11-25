@@ -5,6 +5,7 @@ import TAG from "./tag.js";
 import ACC from "./acc.js";
 import LINK from "./acc_link.js";
 import COUNTER from "./counter.js";
+import DUMMY from "./dummy.js";
 
 const Startup = () => {
 	// Custom Object filter
@@ -29,6 +30,9 @@ const Startup = () => {
 
 	LINK.Fetch();
 	process.stdout.write("[✔️ Acc Link]");
+
+	DUMMY.Fetch();
+	process.stdout.write("[✔️ Dummy]");
 	
 	ACC.Fetch();
 	ACC.Fetch(true);

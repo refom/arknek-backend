@@ -65,7 +65,7 @@ const Edit = (operator) => {
 	return Status.Finish("Edit Operator Success");
 }
 
-// const UpdateOldData = () => {
+// const Update = () => {
 // 	const old_data = Database.Read(PUBLIC_PATH);
 // 	DATA = {}
 
@@ -88,5 +88,5 @@ export default {
 	Add,
 	Delete,
 	Edit,
-	// UpdateOldData,
+	// Update,
 }

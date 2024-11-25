@@ -55,7 +55,7 @@ router.put("/", (req, res) => {
 // GET /update
 // Update Data Structure
 // router.get("/update", (req, res) => {
-// 	const result = CONTROLLER.UpdateStructure();
+// 	const result = CONTROLLER.Update();
 // 	return SendResult(res, result);
 // })
 

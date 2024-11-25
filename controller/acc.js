@@ -76,6 +76,7 @@ const Backup = () => {
 	if (!LINK.Backup()) return Status.Fail("Failed to backup Acc Link");
 
 	// Backup Acc Detail
+	if (!DETAIL.Backup()) return Status.Fail("Failed to backup Acc Detail");
 
 	// Backup Account
 	if (!PRIVATE.Backup()) return Status.Fail("Failed to backup Private Account");
@@ -191,7 +192,7 @@ const Ping = () => {
 }
 
 
-// const UpdateStructure = () => {
+// const Update = () => {
 // 	// DATA = {}
 // 	// const old = Database.Read(PUBLIC_PATH);
 // 	DATA = Database.Read(PUBLIC_PATH);
@@ -236,5 +237,5 @@ export default {
 	Delete,
 	Edit,
 	Ping,
-	// UpdateStructure,
+	// Update,
 }

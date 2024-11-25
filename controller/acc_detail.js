@@ -38,10 +38,6 @@ const Build = (acc) => {
 	}
 }
 
-const Remove = (acc) => {
-
-}
-
 const Fetch = (is_private) => {
 	const path = is_private ? PRIVATE_PATH : PUBLIC_PATH;
 	let detail = Database.Read(path);
