@@ -61,10 +61,10 @@ router.put("/", (req, res) => {
 
 // GET /ping
 // Test data
-router.get("/ping", (req, res) => {
-	const result = CONTROLLER.Ping();
-	return SendResult(res, result);
-})
+// router.get("/ping", (req, res) => {
+// 	const result = CONTROLLER.Ping();
+// 	return SendResult(res, result);
+// })
 
 // // Sold acc
 // router.post("/sold/", (req, res) => {

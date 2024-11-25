@@ -175,23 +175,24 @@ const Edit = (acc) => {
 	return Status.Finish("Edit Account Success");
 }
 
-const Ping = () => {
-	// DATA = {}
-	// const old = Database.Read(PUBLIC_PATH);
+// const Ping = () => {
+// 	// DATA = {}
+// 	// const old = Database.Read(PUBLIC_PATH);
 
-	// Object.keys(old).forEach(acc => {
-	// 	console.log(old[acc].operator.map(op => {
-	// 		return {
-	// 			id: op.id,
-	// 			skin: ["0"],
-	// 			elite: 0
-	// 		}
-	// 	}))
-	// })
-	return Status.Finish("Ping Acc");
-}
+// 	// Object.keys(old).forEach(acc => {
+// 	// 	console.log(old[acc].operator.map(op => {
+// 	// 		return {
+// 	// 			id: op.id,
+// 	// 			skin: ["0"],
+// 	// 			elite: 0
+// 	// 		}
+// 	// 	}))
+// 	// })
+// 	return Status.Finish("Ping Acc");
+// }
 
 
+// Update Data
 // const Update = () => {
 // 	// DATA = {}
 // 	// const old = Database.Read(PUBLIC_PATH);
@@ -236,6 +237,6 @@ export default {
 	Add,
 	Delete,
 	Edit,
-	Ping,
+	// Ping,
 	// Update,
 }

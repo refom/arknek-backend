@@ -67,5 +67,5 @@ router.put("/", (req, res) => {
 // 	res.status(200).send(Ok(all_counter));
 // })
 
-
+// console.log(router.stack.map((r => r.route)))
 export default router;

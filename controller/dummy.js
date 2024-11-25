@@ -76,51 +76,41 @@ const Delete = (id) => {
 	return Status.Finish("Delete Dummy Success");
 }
 
-const Reuse = (id) => {
-	// Check dummy exist
-	if (!LINK.IsAccExist(id)) return Status.Fail("Dummy is not exist");
+// const Update = () => {
+// 	const old_path = path.join(
+// 		CONFIG.PRIVATE_PATH,
+// 		"dummy.json"
+// 	)
 
-	// Reuse Acc Link
-	if (!LINK.Login(id)) return Status.Fail("Failed to reuse Counter");
-	return Status.Finish("Reuse Dummy Success");
-}
+// 	DATA = {}
+// 	const dummy = Database.Read(old_path)
+// 	dummy.forEach(dum => {
+// 		dum.counter.forEach(counter => {
+// 			const id = LINK.GenDummyID(dum.part_id)
+// 			const acc = {
+// 				id: id,
+// 				id_part: dum.part_id,
+// 				counter: counter.value,
+// 				last_login: counter.added_at,
+// 				is_private: true,
+// 			}
 
-const Update = () => {
-	const old_path = path.join(
-		CONFIG.PRIVATE_PATH,
-		"dummy.json"
-	)
+// 			if (!LINK.Add(acc)) return Status.Fail("Failed to add Counter");
 
-	DATA = {}
-	const dummy = Database.Read(old_path)
-	dummy.forEach(dum => {
-		dum.counter.forEach(counter => {
-			const id = LINK.GenDummyID(dum.part_id)
-			const acc = {
-				id: id,
-				id_part: dum.part_id,
-				counter: counter.value,
-				last_login: counter.added_at,
-				is_private: true,
-			}
+// 			DATA[id] = {
+// 				created_at: counter.added_at
+// 			}
+// 		})
+// 	});
 
-			if (!LINK.Add(acc)) return Status.Fail("Failed to add Counter");
-
-			DATA[id] = {
-				created_at: counter.added_at
-			}
-		})
-	});
-
-	if (!Database.Write(PRIVATE_PATH, DATA)) return Status.Fail("Failed to update Dummy");
-	return Status.Finish("Update Dummy Success");
-}
+// 	if (!Database.Write(PRIVATE_PATH, DATA)) return Status.Fail("Failed to update Dummy");
+// 	return Status.Finish("Update Dummy Success");
+// }
 
 export default {
 	Fetch,
 	Backup,
 	Add,
 	Delete,
-	Reuse,
-	Update,
+	// Update,
 }

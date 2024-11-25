@@ -1,6 +1,7 @@
 import path from "path"
 import CONFIG from "#src/config.js"
 import Database from "#src/utils/database.js";
+import Status from "#src/utils/status.js";
 
 import PART from "./part.js";
 import COUNTER from "./counter.js";
@@ -46,6 +47,27 @@ const GetByIdAcc = (id_acc) => {
 	}
 }
 
+const GetUnusedCounter = (id_part) => {
+	const part_counter = DATA
+		.filter((link) => link.id_part === id_part)
+		.map((link) => link.counter)
+		.sort((a, b) => a - b);
+
+	const unused_counter = []
+
+	for (let i = 0; i < part_counter.length; i++) {
+		if (i >= part_counter.length - 1) {
+			unused_counter.push(part_counter[i] + 1)
+			break
+		}
+
+		const diff = part_counter[i + 1] - part_counter[i]
+		if (diff > 1) unused_counter.push(part_counter[i] + 1)
+	}
+
+	return unused_counter
+}
+
 const Fetch = () => {
 	DATA = Database.Read(PRIVATE_PATH)
 	if (DATA !== null) return DATA;
@@ -81,9 +103,15 @@ const Edit = (acc) => {
 }
 
 const Login = (id) => {
+	// Check Acc exist
+	if (!IsAccExist(id)) return Status.Fail("Account is not exist");
+
+	// Update login Acc
 	const acc = DATA.find((link) => link.id_acc === id)
 	acc.last_login = new Date().toLocaleString()
-	return Database.Write(PRIVATE_PATH, DATA)
+	
+	if (!Database.Write(PRIVATE_PATH, DATA)) return Status.Fail("Failed to Login Account");
+	return Status.Finish("Login Account Success");
 }
 
 export default {
@@ -92,6 +120,7 @@ export default {
 	GenPublicID,
 	GenDummyID,
 	GetByIdAcc,
+	GetUnusedCounter,
 	Fetch,
 	Backup,
 	Add,

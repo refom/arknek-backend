@@ -61,7 +61,7 @@ const Edit = (part) => {
 	return Status.Finish("Edit Part Success");
 }
 
-// const UpdateStructure = () => {
+// const Update = () => {
 // 	const old = Database.Read(PRIVATE_PATH);
 // 	DATA = {}
 
@@ -82,5 +82,5 @@ export default {
 	Add,
 	Delete,
 	Edit,
-	// UpdateStructure
+	// Update
 }

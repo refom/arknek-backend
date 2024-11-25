@@ -8,13 +8,7 @@ import COUNTER from "./counter.js";
 import DUMMY from "./dummy.js";
 
 const Startup = () => {
-	// Custom Object filter
-	Object.filter = (obj, predicate) => 
-		Object.keys(obj)
-			.filter( key => predicate(obj[key]) )
-			.reduce( (res, key) => Object.assign(res, { [key]: obj[key] }), {} );
-
-	console.log("Startup Fetch");
+	console.log("- Startup Fetch");
 
 	OPERATOR.Fetch();
 	process.stdout.write("[✔️ Operator]");

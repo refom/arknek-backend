@@ -38,20 +38,12 @@ router.delete("/:id", (req, res) => {
 	return SendResult(res, result);
 })
 
-// PUT /
-// Reuse
-router.put("/:id", (req, res) => {
-	const id = req.params.id;
-	const result = CONTROLLER.Reuse(id)
-	return SendResult(res, result);
-})
-
 // GET /update
 // Update Data Structure
-router.get("/update", (req, res) => {
-	const result = CONTROLLER.Update();
-	return SendResult(res, result);
-})
+// router.get("/update", (req, res) => {
+// 	const result = CONTROLLER.Update();
+// 	return SendResult(res, result);
+// })
 
 
 export default router;

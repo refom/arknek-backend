@@ -57,7 +57,7 @@ const Edit = (tag) => {
 	return Status.Finish("Edit Tag Success");
 }
 
-// const UpdateStructure = () => {
+// const Update = () => {
 // 	const old = Database.Read(PUBLIC_PATH);
 // 	DATA = {}
 
@@ -78,5 +78,5 @@ export default {
 	Add,
 	Delete,
 	Edit,
-	// UpdateStructure
+	// Update
 }
