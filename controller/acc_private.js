@@ -12,25 +12,11 @@ let DATA = {}
 const GetById = (id) => {
 	const acc = DATA[id]
 	return {
-		tag: acc.tag,
-		story: acc.story,
-		six_op_length: acc.six_op_length,
-		operator: acc.operator,
-		orundum: acc.orundum,
-		originite_prime: acc.originite_prime,
-		hh_ticket: acc.hh_ticket,
-		created_at: acc.created_at,
-		updated_at: acc.updated_at
+		...acc
 	}
 }
 
-const Fetch = () => {
-	DATA = Database.Read(PRIVATE_PATH)
-	if (DATA !== null) return DATA;
-	DATA = {}
-	Database.Write(PRIVATE_PATH, DATA)
-	return DATA
-}
+const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || {});
 const Backup = () => Database.Backup(PRIVATE_PATH)
 
 const Add = (id, acc) => {

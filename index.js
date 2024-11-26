@@ -22,6 +22,7 @@ import tag from "#routes/tag.js";
 import acc from "#routes/acc.js";
 import dummy from "#routes/dummy.js";
 import counter from "#routes/counter.js";
+import sold from "#routes/sold.js";
 
 app.use("/operator", operator);
 app.use("/part", part);
@@ -29,6 +30,7 @@ app.use("/tag", tag);
 app.use("/acc", acc);
 app.use("/dummy", dummy);
 app.use("/counter", counter);
+app.use("/sold", sold);
 
 // not found
 app.get("*", (req, res) => {

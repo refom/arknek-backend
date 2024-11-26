@@ -27,8 +27,8 @@ const Fetch = () => {
 
 	Object.keys(DATA).forEach((id) => {
 		NEW_DATA[id] = {
-			...DATA[id],
 			...LINK.GetByIdAcc(id),
+			...DATA[id],
 		}
 	})
 	return NEW_DATA;

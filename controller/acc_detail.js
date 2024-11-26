@@ -28,6 +28,14 @@ const PRIVATE_PATH = path.join(
 let DATA = {}
 let DATA_PRIVATE = {}
 
+const GetById = (id, is_private) => {
+	const acc = is_private ? DATA_PRIVATE[id] : DATA[id];
+	if (!acc) return {}
+	return {
+		...acc
+	}
+}
+
 const Build = (acc) => {
 	return {
 		name: acc.name,
@@ -40,12 +48,7 @@ const Build = (acc) => {
 
 const Fetch = (is_private) => {
 	const path = is_private ? PRIVATE_PATH : PUBLIC_PATH;
-	let detail = Database.Read(path);
-	if (detail === null) {
-		detail = {};
-		Database.Write(path, detail);
-	}
-
+	const detail = (Database.Read(path) || {});
 	is_private ? DATA_PRIVATE = detail : DATA = detail
 	return detail;
 }
@@ -63,13 +66,13 @@ const Delete = (id, is_private) => {
 	return Database.Write(is_private ? PRIVATE_PATH : PUBLIC_PATH, detail)
 }
 
-const Edit = (acc, old_link) => {
+const Edit = (acc, is_private) => {
 	const target = acc.is_private ? DATA_PRIVATE : DATA;
-	const old_target = old_link.is_private ? DATA_PRIVATE : DATA;
+	const old_target = is_private ? DATA_PRIVATE : DATA;
 
 	if (target !== old_target) {
 		delete old_target[acc.id];
-		Database.Write(old_link.is_private ? PRIVATE_PATH : PUBLIC_PATH, old_target);
+		Database.Write(is_private ? PRIVATE_PATH : PUBLIC_PATH, old_target);
 	}
 
 	target[acc.id] = Build(acc);
@@ -78,6 +81,7 @@ const Edit = (acc, old_link) => {
 
 
 export default {
+	GetById,
 	Fetch,
 	Backup,
 	Add,

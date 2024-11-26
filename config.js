@@ -15,16 +15,15 @@ const CONFIG = {
 		ACC: {
 			PUBLIC: "acc.json",
 			DETAIL: "acc_detail.json",
-			GACHA: "acc_gacha.json",
 			PRIVATE: "acc_private.json",
 			DUMMY: "acc_dummy.json",
 			SOLD: "acc_sold.json",
 			LINK: "acc_link.json",
 		},
 		COUNTER: "counter.json",
-		COUNTER_LINK: "counter_link.json",
 		PART: "part.json",
 		TAG: "tag.json",
+		GROUP: "group.json",
 	},
 	COUNTER_TYPE: {
 		PUBLIC: "public",

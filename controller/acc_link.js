@@ -35,6 +35,7 @@ const GenID = (id_code, id_part, counter_type) => {
 }
 
 const GenPublicID = (id_part) => GenID(CONFIG.ID_CODE.PUBLIC, id_part, CONFIG.COUNTER_TYPE.PUBLIC)
+const GenGachaID = (id_part) => GenID(CONFIG.ID_CODE.GACHA, id_part, CONFIG.COUNTER_TYPE.GACHA)
 const GenDummyID = (id_part) => GenID(CONFIG.ID_CODE.DUMMY, id_part, CONFIG.COUNTER_TYPE.DUMMY)
 
 const GetByIdAcc = (id_acc) => {
@@ -68,23 +69,23 @@ const GetUnusedCounter = (id_part) => {
 	return unused_counter
 }
 
-const Fetch = () => {
-	DATA = Database.Read(PRIVATE_PATH)
-	if (DATA !== null) return DATA;
-	DATA = []
-	Database.Write(PRIVATE_PATH, DATA)
-	return DATA
-}
-const Backup = () => (Database.Backup(PRIVATE_PATH) && COUNTER.Backup())
-
-const Add = (acc) => {
-	DATA.push({
+const Build = (acc) => {
+	return {
 		id_acc: acc.id,
 		id_part: acc.id_part,
 		counter: acc.counter,
-		last_login: new Date().toLocaleString(),
 		is_private: acc.is_private
-	})
+	}
+}
+
+const Fetch = () => (DATA = Database.Read(PRIVATE_PATH) || []);
+const Backup = () => (Database.Backup(PRIVATE_PATH) && COUNTER.Backup())
+
+const Add = (acc) => {
+	const link = Build(acc)
+	link.last_login = new Date().toLocaleString()
+
+	DATA.push(link)
 	return Database.Write(PRIVATE_PATH, DATA)
 }
 
@@ -118,6 +119,7 @@ export default {
 	IsCounterExist,
 	IsAccExist,
 	GenPublicID,
+	GenGachaID,
 	GenDummyID,
 	GetByIdAcc,
 	GetUnusedCounter,

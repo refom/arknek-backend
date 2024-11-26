@@ -18,8 +18,7 @@ let DATA = {};
 const GetById = (id) => {
 	const part = DATA[id];
 	return {
-		name: part.name,
-		prefix: part.prefix
+		...part,
 	}
 }
 const IsValid = (part) => Boolean(part.name);

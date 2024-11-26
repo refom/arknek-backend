@@ -21,6 +21,7 @@ import OPERATOR from "./operator.js";
 // originite_prime : number
 // hh_ticket : number
 // is_private : boolean
+// is_gacha : boolean
 // operator : [ {
 //  	id : string,
 //  	skin : string,
@@ -41,6 +42,19 @@ const IsValid = (acc) => Boolean(
 	acc.counter
 );
 
+const GetById = (id) => {
+	const link = LINK.GetByIdAcc(id)
+	const acc = link.is_private ? PRIVATE.GetById(id) : DATA[id]
+	const detail = DETAIL.GetById(id, link.is_private)
+
+	NEW_DATA = {
+		...link,
+		...acc,
+		...detail,
+	}
+	return NEW_DATA
+}
+
 const Remove = (id) => {
 	delete DATA[id];
 	return Database.Write(PUBLIC_PATH, DATA)
@@ -55,6 +69,7 @@ const Build = (acc) => {
 		orundum: acc.orundum,
 		originite_prime: acc.originite_prime,
 		hh_ticket: acc.hh_ticket,
+		is_gacha: acc.is_gacha,
 	}
 }
 
@@ -91,7 +106,7 @@ const Add = (acc) => {
 	if (LINK.IsCounterExist(acc.id_part, acc.counter)) return Status.Fail("Counter already exist");
 
 	// Create ID
-	acc.id = LINK.GenPublicID(acc.id_part);
+	acc.id = acc.is_gacha ? LINK.GenGachaID(acc.id_part) : LINK.GenPublicID(acc.id_part);
 	if (LINK.IsAccExist(acc.id)) return Status.Fail("Account already exist");
 
 	// Save Acc Link
@@ -118,16 +133,16 @@ const Add = (acc) => {
 
 const Delete = (id) => {
 	if (!LINK.IsAccExist(id)) return Status.Fail("Account is not exist");
-	const acc = LINK.GetByIdAcc(id);
+	const is_private = LINK.GetByIdAcc(id).is_private;
 
 	// Delete Acc Link
 	if (!LINK.Delete(id)) return Status.Fail("Failed to delete Counter");
 
 	// Delete Acc Detail
-	if (!DETAIL.Delete(id, acc.is_private)) return Status.Fail("Failed to delete Detail");
+	if (!DETAIL.Delete(id, is_private)) return Status.Fail("Failed to delete Detail");
 
 	// Delete Acc
-	if (acc.is_private) {
+	if (is_private) {
 		if (!PRIVATE.Delete(id)) return Status.Fail("Failed to delete Account");
 	} else {
 		delete DATA[id];
@@ -145,14 +160,14 @@ const Edit = (acc) => {
 	if (LINK.IsCounterExist(acc.id_part, acc.counter, acc.id)) return Status.Fail("Counter already exist");
 	
 	// Edit Acc Link
-	const old_link = LINK.GetByIdAcc(acc.id)
+	const is_private = LINK.GetByIdAcc(acc.id).is_private;
 	if (!LINK.Edit(acc)) return Status.Fail("Failed to edit Counter Account");
 
 	// Edit Acc Detail
-	if (!DETAIL.Edit(acc, old_link)) return Status.Fail("Failed to edit Detail Account");
+	if (!DETAIL.Edit(acc, is_private)) return Status.Fail("Failed to edit Detail Account");
 
 	// Edit Account
-	const old_acc = old_link.is_private ? PRIVATE.GetById(acc.id) : DATA[acc.id]
+	const old_acc = is_private ? PRIVATE.GetById(acc.id) : DATA[acc.id]
 
 	const EDITED_ACC = Build(acc)
 	EDITED_ACC.created_at = old_acc.created_at
@@ -160,12 +175,12 @@ const Edit = (acc) => {
 
 	// Edit Account Private or Public
 	if (acc.is_private) {
-		if (!old_link.is_private) {
+		if (!is_private) {
 			if (!Remove(acc.id)) Status.Fail("Failed to edit > delete Public Account");
 		}
 		if (!PRIVATE.Add(acc.id, EDITED_ACC)) return Status.Fail("Failed to edit Private Account");
 	} else {
-		if (old_link.is_private) {
+		if (is_private) {
 			if (!PRIVATE.Delete(acc.id)) Status.Fail("Failed to edit > delete Private Account");
 		}
 		DATA[acc.id] = EDITED_ACC;
@@ -232,6 +247,7 @@ const Edit = (acc) => {
 // }
 
 export default {
+	GetById,
 	Fetch,
 	Backup,
 	Add,
